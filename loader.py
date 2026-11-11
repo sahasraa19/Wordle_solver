@@ -11,7 +11,7 @@ def load_pokemon(path=None):
     """
     if path is None:
         here = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(here, "data", "pokemon.csv")
+        path = os.path.join(here, "data", "pokemon_full.csv")
     records = []
     with open(path, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
