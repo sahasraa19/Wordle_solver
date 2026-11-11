@@ -8,10 +8,12 @@ import matplotlib.pyplot as plt
 from minimax_solver import MinimaxSolver, _key
 from entropy_solver import EntropySolver
 
-RESULTS_DIR = '/content/drive/MyDrive/pokemon_wordle/results'
+RESULTS_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "results"
+)
 
-# To use Member 2's real solvers, add entries here: {"Random": fn, "Filter": fn}
-# where fn(answer_index) -> number of guesses.
+
 TEAM_OVERRIDES = {}
 
 
