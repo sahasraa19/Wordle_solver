@@ -27,193 +27,144 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --navy: #17233f;
-    --red: #e63946;
-    --blue: #3155a4;
-    --gold: #f4b942;
-    --bg: #f3f5fa;
+    --ink: #202844;
+    --muted: #68728a;
+    --pink: #f6a9c4;
+    --pink-soft: #fff0f5;
+    --lavender: #eeeaff;
+    --red: #e94d69;
+    --cream: #fffdfb;
+    --border: #eee8f1;
+}
+
+html, body, [class*="css"] {
+    font-family: 'Nunito', sans-serif !important;
+    color: var(--ink);
 }
 
 .stApp {
-    background: var(--bg);
-    color: var(--navy);
-    font-family: 'Nunito', sans-serif;
+    background:
+        radial-gradient(ellipse at 5% 5%, #fff0f5 0%, transparent 32%),
+        radial-gradient(ellipse at 95% 15%, #f0edff 0%, transparent 30%),
+        #fffdfb;
 }
 
 .block-container {
-    max-width: 1350px;
+    max-width: 1200px;
     padding-top: 2rem;
+    padding-bottom: 3rem;
 }
 
-h1, h2, h3, h4, p, label, li,
-[data-testid="stMarkdownContainer"] {
-    color: var(--navy);
+h1, h2, h3, h4 {
+    color: var(--ink) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.5px;
 }
 
-h1, h2, h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-}
-
-.lab-hero {
-    background: linear-gradient(115deg, #17233f, #263f70);
-    border-left: 8px solid var(--red);
-    padding: 34px;
-    border-radius: 18px;
-    color: #ffffff;
-    margin-bottom: 24px;
-    box-shadow: 0 10px 28px #17233f22;
-}
-
-.lab-hero h1 {
-    color: #ffffff !important;
-    font-size: 2.7rem;
-    margin: 8px 0;
-}
-
-.lab-hero p {
-    color: #e8edf8 !important;
-    font-size: 1.05rem;
-}
-
-.eyebrow {
-    color: #ffd166;
-    font-size: .75rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-}
-
-.panel {
-    background: #ffffff;
-    border: 1px solid #dce2ed;
-    border-radius: 16px;
-    padding: 22px;
-    color: #17233f;
-    box-shadow: 0 5px 18px #17233f0b;
-}
-
-.panel h3, .panel p {
-    color: #17233f !important;
-}
-
-.metric {
-    background: #ffffff;
-    border: 1px solid #dce2ed;
-    border-top: 4px solid #e63946;
-    border-radius: 14px;
-    padding: 17px;
-    box-shadow: 0 5px 15px #17233f0b;
-}
-
-.metric small {
-    color: #58647a;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .8px;
-}
-
-.metric b {
-    display: block;
-    color: #17233f;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.9rem;
-    margin: 5px 0;
-}
-
-.metric span {
-    color: #58647a !important;
-}
-
-.pill {
-    display: inline-block;
-    border-radius: 8px;
-    padding: 6px 11px;
-    background: #e9eefb;
-    color: #1c3975;
-    font-size: .8rem;
-    font-weight: 900;
-    margin: 3px;
-}
-
-[data-testid="stMetric"] {
-    background: #ffffff;
-    border: 1px solid #dce2ed;
-    border-radius: 14px;
-    padding: 16px;
-}
-
-[data-testid="stMetricLabel"] p {
-    color: #58647a !important;
-    font-weight: 800;
-}
-
-[data-testid="stMetricValue"] {
-    color: #17233f !important;
+p, li, label, .stMarkdown {
+    color: var(--ink);
 }
 
 [data-testid="stSidebar"] {
-    background: #ffffff;
-    border-right: 1px solid #dce2ed;
+    background: linear-gradient(180deg, #fff0f5 0%, #f3efff 100%);
+    border-right: 1px solid #eee4f1;
 }
 
 [data-testid="stSidebar"] * {
-    color: #17233f;
+    color: #26304c !important;
+    font-weight: 700;
 }
 
-[data-testid="stSidebar"] [aria-checked="true"] p {
-    color: #e63946 !important;
-    font-weight: 900;
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    padding: 9px 12px;
+    border-radius: 12px;
 }
 
 .stButton > button {
-    background: #e63946;
-    color: #ffffff !important;
-    border: 0;
-    border-radius: 10px;
-    padding: .65rem 1rem;
+    background: linear-gradient(135deg, #ee6685, #e94d69);
+    color: white !important;
+    border: none;
+    border-radius: 13px;
+    padding: 0.65rem 1.2rem;
     font-weight: 900;
+    box-shadow: 0 5px 14px #e94d6930;
+    transition: all 0.2s ease;
 }
 
 .stButton > button:hover {
-    background: #bd2634;
-    color: #ffffff !important;
-    border: 0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px #e94d6940;
+    border: none;
 }
 
-.stButton > button:disabled {
-    background: #d5dbe6;
-    color: #58647a !important;
+div[data-testid="stMetric"] {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px #3330440a;
 }
 
-input, textarea,
-[data-baseweb="select"] > div {
-    background: #ffffff !important;
-    color: #17233f !important;
-    border-color: #cbd3e1 !important;
+div[data-testid="stMetric"] label {
+    color: var(--muted) !important;
+    font-weight: 800 !important;
 }
 
-[data-testid="stDataFrame"] {
-    background: #ffffff;
-    border: 1px solid #dce2ed;
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: var(--red) !important;
+    font-weight: 900 !important;
+}
+
+div[data-testid="stSelectbox"] > div > div,
+div[data-testid="stTextInput"] input {
+    background: white;
     border-radius: 12px;
+    border-color: #e9dce9;
+    color: var(--ink);
 }
 
-[data-testid="stAlert"] {
+div[data-testid="stDataFrame"] {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.stAlert {
+    border-radius: 14px;
+}
+
+hr {
+    border-color: #eee4f1;
+}
+
+[data-testid="stExpander"] {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.stDownloadButton > button {
+    background: #eeeaff;
+    color: #35305f !important;
+    border: 1px solid #dcd4ff;
     border-radius: 12px;
-}
-
-.stProgress > div > div > div {
-    background: #e63946;
+    font-weight: 800;
 }
 
 footer {
     visibility: hidden;
 }
+
+#MainMenu {
+    visibility: hidden;
+}
 </style>
 """, unsafe_allow_html=True)
+
+
 
 
 def hero(kicker, title, subtitle):
