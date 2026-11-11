@@ -1,5 +1,5 @@
 """Minimax solver: pick the guess whose WORST-case feedback leaves the fewest candidates."""
-import os, pickle, hashlib
+import os, pickle, hashlib, math, tempfile
 import numpy as np
 
 # ---- ADJUST THESE TWO IMPORTS IF YOUR TEAMMATES NAMED THINGS DIFFERENTLY ----
@@ -7,7 +7,7 @@ from engine import feedback
 from loader import load_pokemon
 # -----------------------------------------------------------------------------
 
-CACHE_DIR = '/content/drive/MyDrive/pokemon_wordle/cache'
+CACHE_DIR = os.path.join(tempfile.gettempdir(), "pokemon_wordle_cache")
 
 
 def _key(p):
@@ -47,9 +47,12 @@ class MinimaxSolver:
                 M[i, j] = codes.setdefault(tuple(feedback(g, a)), len(codes))
         self.M, self.patterns = M, codes
         if use_cache:
-            os.makedirs(CACHE_DIR, exist_ok=True)
-            with open(path, 'wb') as f:
-                pickle.dump((M, codes), f)
+    try:
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        with open(path, 'wb') as f:
+            pickle.dump((M, codes), f)
+    except OSError:
+        pass
 
     def _idx(self, p):
         if isinstance(p, (int, np.integer)):
