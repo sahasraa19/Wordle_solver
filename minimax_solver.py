@@ -10,7 +10,7 @@ import numpy as np
 from engine import feedback
 from loader import load_pokemon
 
-CACHE_DIR = os.path.join(tempfile.gettempdir(), "pokemon_wordle_cache")
+CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache")
 
 
 def _key(p):
