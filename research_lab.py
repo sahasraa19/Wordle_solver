@@ -1,5 +1,8 @@
 
+
+
 import os
+import html
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
@@ -24,14 +27,43 @@ BY_NAME = {p["name"]: p for p in POKEMON}
 NAMES = sorted(BY_NAME)
 
 st.set_page_config(
-    page_title="Pokémon Professor's Research Lab",
+    page_title="Pokémon Wordle · Professor Oak's Lab",
     page_icon="💗",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 
 # ==================================================
-# MODERN KAWAII PREMIUM DESIGN
+# POKÉMON HOME-STYLE ARTWORK
+# ==================================================
+
+ART_IDS = {
+    "Bulbasaur": 1, "Ivysaur": 2, "Venusaur": 3,
+    "Charmander": 4, "Charmeleon": 5, "Charizard": 6,
+    "Squirtle": 7, "Wartortle": 8, "Blastoise": 9,
+    "Pikachu": 25, "Raichu": 26, "Jigglypuff": 39,
+    "Vulpix": 37, "Psyduck": 54, "Growlithe": 58,
+    "Arcanine": 59, "Gengar": 94, "Eevee": 133,
+    "Vaporeon": 134, "Jolteon": 135, "Flareon": 136,
+    "Snorlax": 143, "Dratini": 147, "Dragonite": 149,
+    "Mewtwo": 150, "Mew": 151, "Togepi": 175,
+    "Mareep": 179, "Espeon": 196, "Umbreon": 197,
+    "Piplup": 393, "Pachirisu": 417, "Lucario": 448,
+    "Leafeon": 470, "Glaceon": 471, "Sylveon": 700,
+    "Rowlet": 722, "Mimikyu": 778, "Grookey": 810,
+    "Scorbunny": 813, "Sobble": 816,
+    "Sprigatito": 906, "Fuecoco": 909, "Quaxly": 912,
+}
+
+ART_URL = (
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/"
+    "sprites/pokemon/other/home/{pokemon_id}.png"
+)
+
+
+# ==================================================
+# PREMIUM KAWAII DESIGN
 # ==================================================
 
 st.markdown("""
@@ -61,8 +93,8 @@ html, body, [class*="css"] {
 }
 
 .block-container {
-    max-width: 1200px;
-    padding-top: 2rem;
+    max-width: 1260px;
+    padding-top: 1.6rem;
     padding-bottom: 3rem;
 }
 
@@ -95,12 +127,12 @@ p, li, label {
     background: rgba(255,255,255,0.5);
     border: 1px solid transparent;
     border-radius: 15px;
-    padding: 11px 13px;
+    padding: 10px 13px;
     transition: all .2s ease;
 }
 
 [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
-    background: #fff;
+    background: white;
     border-color: #f2c8dc;
     transform: translateX(3px);
 }
@@ -112,11 +144,11 @@ p, li, label {
     color: #753e60 !important;
 }
 
-/* SIDEBAR BRAND */
+/* BRAND */
 
 .lab-brand {
     text-align: center;
-    padding: 14px 5px 22px;
+    padding: 12px 5px 20px;
 }
 
 .lab-brand-ball {
@@ -133,7 +165,7 @@ p, li, label {
 }
 
 .lab-brand h3 {
-    margin: 16px 0 3px;
+    margin: 15px 0 3px;
     color: #70425e !important;
 }
 
@@ -147,63 +179,61 @@ p, li, label {
 .lab-hero {
     position: relative;
     overflow: hidden;
-    padding: 32px;
+    padding: 28px 30px;
     border-radius: 26px;
     background: linear-gradient(120deg, #fff0f6, #f0ebff 75%, #fff9fc);
     border: 1px solid #f1dfeb;
     box-shadow: 0 12px 30px #9b73951a;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .lab-hero:after {
     content: "✦";
     position: absolute;
-    right: 42px;
-    top: 12px;
-    font-size: 85px;
+    right: 35px;
+    top: 4px;
+    font-size: 82px;
     color: #e9b9d2;
-    opacity: .55;
-    text-shadow: 0 8px 20px #d99cbd55;
+    opacity: .5;
 }
 
 .lab-hero .eyebrow {
     color: #c16c96;
     font-weight: 900;
     letter-spacing: 2px;
-    font-size: .78rem;
+    font-size: .76rem;
 }
 
 .lab-hero h1 {
-    font-size: 2.35rem;
-    margin: 8px 0;
+    font-size: 2.15rem;
+    margin: 7px 0;
 }
 
 .lab-hero p {
     color: #786d83;
-    max-width: 720px;
+    max-width: 760px;
+    margin-bottom: 0;
 }
 
-/* PANELS */
+/* CARDS */
 
 .panel {
     background: linear-gradient(145deg, #fff, #fff8fc);
     border: 1px solid #f0e2eb;
     border-radius: 22px;
-    padding: 23px;
+    padding: 21px;
     box-shadow: 0 5px 0 #f3e4ed, 0 12px 25px #8c64851c;
-    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.panel:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 0 #f1dce8, 0 17px 30px #8c648526;
+.panel h3 {
+    margin-top: 0;
 }
 
 .art-panel {
     background: radial-gradient(circle at 50% 42%, #fff 0%, #fff0f6 65%, #eee8ff 100%);
     border: 1px solid #f0dfeb;
     border-radius: 25px;
-    padding: 16px;
+    padding: 10px 14px;
     box-shadow: 0 6px 0 #f1e1eb, 0 15px 28px #8c64851c;
     text-align: center;
 }
@@ -217,12 +247,13 @@ p, li, label {
 .metric {
     background: linear-gradient(145deg, #fff, #fff5fa);
     border: 1px solid #f1e1eb;
-    border-radius: 20px;
-    padding: 19px;
+    border-radius: 19px;
+    padding: 16px;
     box-shadow: 0 5px 0 #f2e4ec, 0 10px 20px #9b739515;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
+    min-height: 104px;
 }
 
 .metric small {
@@ -232,8 +263,14 @@ p, li, label {
 
 .metric b {
     color: #cf719b;
-    font-size: 1.8rem;
+    font-size: 1.65rem;
     font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+.metric span {
+    color: #8a90a3;
+    font-size: .8rem;
 }
 
 /* PILLS */
@@ -254,23 +291,33 @@ p, li, label {
     color: white !important;
     border: 1px solid #df8caf;
     border-radius: 15px;
-    padding: .7rem 1.2rem;
+    padding: .66rem 1rem;
     font-weight: 900;
-    box-shadow: 0 5px 0 #c96e96, 0 9px 18px #d98bae30;
-    transition: all .2s ease;
+    box-shadow: 0 4px 0 #c96e96, 0 8px 17px #d98bae30;
+    transition: all .18s ease;
 }
 
 .stButton > button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 7px 0 #c96e96, 0 13px 22px #d98bae40;
+    box-shadow: 0 6px 0 #c96e96, 0 12px 20px #d98bae40;
 }
 
-/* STREAMLIT ELEMENTS */
+.stButton > button:disabled {
+    opacity: .45;
+}
+
+.stDownloadButton > button {
+    background: #eee8ff;
+    color: #51416f !important;
+    border: 1px solid #dcd0fa;
+    border-radius: 12px;
+    font-weight: 800;
+}
 
 div[data-testid="stMetric"] {
     background: white;
     border: 1px solid var(--border);
-    padding: 18px;
+    padding: 15px;
     border-radius: 18px;
     box-shadow: 0 5px 18px #3330440a;
 }
@@ -303,20 +350,35 @@ div[data-testid="stDataFrame"] {
     border: 1px solid var(--border);
 }
 
-.stDownloadButton > button {
-    background: #eee8ff;
-    color: #51416f !important;
-    border: 1px solid #dcd0fa;
-    border-radius: 12px;
-    font-weight: 800;
-}
-
 .battle-result {
     background: linear-gradient(120deg, #fff0f6, #f0ebff);
     border: 1px solid #efd9e8;
     border-radius: 22px;
-    padding: 24px;
+    padding: 22px;
     box-shadow: 0 7px 20px #9b73951a;
+}
+
+.game-tile {
+    background: white;
+    border: 1px solid #f0dce9;
+    border-radius: 15px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 4px 0 #f4e5ed;
+}
+
+.game-tile b {
+    display: block;
+    color: #6d4967;
+    font-size: 1.02rem;
+}
+
+.turn-card {
+    background: linear-gradient(120deg, #fff, #fff6fb);
+    border: 1px solid #f0dfeb;
+    border-radius: 17px;
+    padding: 13px 16px;
+    margin: 8px 0;
 }
 
 .footer-text {
@@ -325,7 +387,7 @@ div[data-testid="stDataFrame"] {
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
-    padding: 28px 0 8px;
+    padding: 26px 0 8px;
 }
 
 hr {
@@ -340,94 +402,113 @@ footer, #MainMenu {
 
 
 # ==================================================
-# REUSABLE UI COMPONENTS
+# REUSABLE COMPONENTS
 # ==================================================
 
 def hero(kicker, title, subtitle):
     st.markdown(
-        f"""
-        <div class="lab-hero">
-            <div class="eyebrow">{kicker}</div>
-            <h1>{title}</h1>
-            <p>{subtitle}</p>
-        </div>
-        """,
-        unsafe_allow_html=True
+        f'<div class="lab-hero"><div class="eyebrow">{kicker}</div>'
+        f'<h1>{title}</h1><p>{subtitle}</p></div>',
+        unsafe_allow_html=True,
     )
 
 
 def metric(label, value, sub=""):
     st.markdown(
-        f"""
-        <div class="metric">
-            <small>{label}</small>
-            <b>{value}</b>
-            <span style="color:#8a90a3;font-size:.82rem">{sub}</span>
-        </div>
-        """,
-        unsafe_allow_html=True
+        f'<div class="metric"><small>{html.escape(str(label))}</small>'
+        f'<b>{html.escape(str(value))}</b><span>{html.escape(str(sub))}</span></div>',
+        unsafe_allow_html=True,
     )
 
 
 def clue_chip(label, value):
     colors = {
-        "green": ("#d9f7e8", "#126b43"),
-        "amber": ("#fff0c7", "#8a5b00"),
-        "grey": ("#e9ebf1", "#606779"),
-        "up": ("#dcecff", "#245b9b"),
-        "down": ("#ffe1df", "#a43e39")
+        "green": ("#d9f7e8", "#126b43", "✓"),
+        "amber": ("#fff0c7", "#8a5b00", "◆"),
+        "grey": ("#e9ebf1", "#606779", "×"),
+        "up": ("#dcecff", "#245b9b", "↑"),
+        "down": ("#ffe1df", "#a43e39", "↓"),
     }
 
-    symbols = {
-        "green": "✓",
-        "amber": "◆",
-        "grey": "×",
-        "up": "↑",
-        "down": "↓"
-    }
-
-    bg, fg = colors.get(value, ("#eee", "#333"))
-    symbol = symbols.get(value, "•")
+    bg, fg, symbol = colors.get(
+        str(value).lower(),
+        ("#eee", "#333", "•")
+    )
 
     st.markdown(
-        f"""
-        <span class="pill"
-        style="background:{bg};color:{fg};">
-        {label}: {symbol} {value.title()}
-        </span>
-        """,
-        unsafe_allow_html=True
+        f'<span class="pill" style="background:{bg};color:{fg}">'
+        f'{html.escape(str(label))}: {symbol} '
+        f'{html.escape(str(value).title())}</span>',
+        unsafe_allow_html=True,
     )
 
 
-def pokemon_art(name, caption=None, width=220):
-    """Load Pokémon HOME-style artwork from the PokéAPI sprite repository."""
+def pokemon_art(name, caption=None, width=190):
+    """Show genuine Pokémon HOME-style artwork for mapped Pokédex entries."""
+    pokemon_id = ART_IDS.get(name)
 
-    artwork_ids = {
-        "Pikachu": 25,
-        "Eevee": 133,
-        "Gengar": 94
+    if pokemon_id:
+        st.image(
+            ART_URL.format(pokemon_id=pokemon_id),
+            caption=caption,
+            width=width,
+        )
+    else:
+        st.markdown(
+            f'<div style="padding:25px 5px;text-align:center;color:#9b7893">'
+            f'<div style="font-size:42px">✦</div>'
+            f'<b>{html.escape(name)}</b>'
+            f'<div style="font-size:12px">Pokédex entry</div></div>',
+            unsafe_allow_html=True,
+        )
+
+
+def art_card(name, caption=None, width=175):
+    with st.container(border=True):
+        pokemon_art(name, caption, width)
+
+
+def safe_types(pokemon):
+    return (
+        f"{pokemon.get('type1', '—')} / "
+        f"{pokemon.get('type2') or '—'}"
+    )
+
+
+def render_clue_history(history):
+    labels = ["Generation", "Type 1", "Type 2", "Height", "Weight"]
+
+    for idx, (guess, clue) in enumerate(history, 1):
+        with st.container(border=True):
+            st.markdown(
+                f"**Guess {idx}: {guess['name']}** · "
+                f"Gen {guess['gen']} · {safe_types(guess)}"
+            )
+
+            cols = st.columns(5)
+
+            for col, label, value in zip(cols, labels, clue):
+                with col:
+                    clue_chip(label, value)
+
+
+def init_session():
+    defaults = {
+        "human_game": None,
+        "human_games_played": 0,
+        "human_games_won": 0,
+        "human_total_guesses": 0,
+        "human_best": None,
+        "last_battle": None,
+        "battle_step": 0,
     }
 
-    pokemon_id = artwork_ids.get(name)
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
 
-    if pokemon_id is None:
-        return
 
-    image_url = (
-        "https://raw.githubusercontent.com/"
-        "PokeAPI/sprites/master/sprites/pokemon/other/home/"
-        f"{pokemon_id}.png"
-    )
-
-    try:
-        st.image(
-            image_url,
-            caption=caption,
-            width=width
-        )
-    except Exception:
-        st.caption(f"Artwork could not be loaded for {name}.")
+init_session()
 
 
 # ==================================================
@@ -435,7 +516,6 @@ def pokemon_art(name, caption=None, width=220):
 # ==================================================
 
 with st.sidebar:
-
     st.markdown("""
     <div class="lab-brand">
         <div class="lab-brand-ball">🔴</div>
@@ -451,13 +531,14 @@ with st.sidebar:
             "Pokédex Challenge",
             "AI Battle Arena",
             "Professor’s Analytics",
-            "Dataset Explorer"
+            "Dataset Explorer",
         ],
-        label_visibility="collapsed"
+        label_visibility="collapsed",
     )
 
     st.divider()
-    st.caption("TEAM PROJECT · 386 SPECIES · 4 STRATEGIES")
+    st.caption(f"TEAM PROJECT · {len(POKEMON)} SPECIES · 4 STRATEGIES")
+    st.caption("Choose a lab station to explore.")
 
 
 # ==================================================
@@ -468,215 +549,213 @@ if page == "Welcome Hub":
 
     hero(
         "✦ WELCOME, RESEARCHER ✦",
-        "The Pokémon Wordle Lab",
-        "A playful research environment for testing how intelligent "
-        "agents identify a hidden Pokémon using structured clues."
+        "A little world of Pokémon & strategy",
+        "Enter the laboratory, solve a mystery, watch intelligent agents "
+        "think, and explore the data behind every decision.",
     )
 
-    art_col, intro_col = st.columns([0.85, 2])
+    roster = ["Eevee", "Pikachu", "Vulpix", "Piplup", "Sylveon"]
+    cols = st.columns(len(roster))
 
-    with art_col:
-        with st.container(border=True):
-            pokemon_art("Pikachu", "Your laboratory companion", 210)
+    for col, name in zip(cols, roster):
+        with col:
+            art_card(name, name, 125)
 
-    with intro_col:
-        st.markdown("""
-        <div class="panel">
-            <h3>✨ Welcome to the laboratory!</h3>
-            <p>
-            Discover how intelligent agents identify a hidden Pokémon
-            using generation, type, height and weight clues.
-            Explore human gameplay, AI strategies and measured
-            benchmark performance in one interactive application.
-            </p>
-            <span class="pill" style="background:#ffe3ef;color:#a34e77">
-            Intelligent guessing</span>
-            <span class="pill" style="background:#eee8ff;color:#68538f">
-            Strategy research</span>
-            <span class="pill" style="background:#e4f5ed;color:#39775b">
-            386 Pokémon</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("### ✨ The laboratory at a glance")
-
-    cols = st.columns(4)
+    st.markdown("### ✨ Your laboratory dashboard")
 
     stats = [
-        ("Pokémon indexed", len(POKEMON), "Complete dataset"),
-        ("Generations", len(set(p["gen"] for p in POKEMON)),
-         "Across the Pokédex"),
-        ("Clue dimensions", 5, "Gen · Types · Height · Weight"),
-        ("Guess limit", MAX_GUESSES, "Per human challenge")
+        ("Pokémon indexed", len(POKEMON), "Species in the real dataset"),
+        ("Generations", len(set(p["gen"] for p in POKEMON)), "Across the Pokédex"),
+        ("Clue dimensions", 5, "Generation · Types · Height · Weight"),
+        ("Guess limit", MAX_GUESSES, "Attempts per mystery"),
     ]
+
+    cols = st.columns(4)
 
     for col, item in zip(cols, stats):
         with col:
             metric(*item)
 
-    st.write("")
+    st.markdown("### 🧭 Choose your adventure")
 
-    left, right = st.columns(2)
+    cards = [
+        ("🎮", "Pokédex Challenge", "You vs. a hidden Pokémon",
+         "Use clues and solve it in limited guesses."),
+        ("🤖", "AI Battle Arena", "Watch the strategies think",
+         "Compare guesses and candidate reduction."),
+        ("📊", "Professor's Analytics", "Explore measured performance",
+         "Review benchmark results and charts."),
+        ("📚", "Dataset Explorer", "Browse the real Pokédex",
+         "Search and inspect the dataset records."),
+    ]
 
-    with left:
-        st.markdown("""
-        <div class="panel">
-            <h3>🧪 Your research mission</h3>
-            <p>
-            Discover how different guessing strategies narrow a
-            search space. Start with a human challenge, watch an AI
-            agent reason through clues, then compare performance
-            using benchmark evidence.
-            </p>
-            <span class="pill" style="background:#ffe3ef;color:#a34e77">Baseline</span>
-            <span class="pill" style="background:#eee8ff;color:#68538f">Filtering</span>
-            <span class="pill" style="background:#e4f5ed;color:#39775b">Entropy</span>
-            <span class="pill" style="background:#fff0c7;color:#8a5b00">Minimax</span>
-        </div>
-        """, unsafe_allow_html=True)
+    cols = st.columns(2)
 
-    with right:
-        st.markdown("""
-        <div class="panel">
-            <h3>🧭 Explore the laboratory</h3>
-            <p><b>🎮 Pokédex Challenge</b><br>
-            Solve a mystery species using clues.</p>
-            <p><b>🤖 AI Battle Arena</b><br>
-            Watch intelligent agents make guesses.</p>
-            <p><b>📊 Professor's Analytics</b><br>
-            Compare measured solver performance.</p>
-            <p><b>📚 Dataset Explorer</b><br>
-            Investigate the actual Pokémon dataset.</p>
-        </div>
-        """, unsafe_allow_html=True)
+    for col, (emoji, title, tagline, desc) in zip(cols, cards):
+        with col:
+            st.markdown(
+                f'<div class="panel"><div style="font-size:28px">{emoji}</div>'
+                f'<h3>{title}</h3><b style="color:#c16c96">{tagline}</b>'
+                f'<p>{desc}</p></div>',
+                unsafe_allow_html=True,
+            )
 
-    st.markdown("### 💡 How does the mystery work?")
+    st.markdown("### 💗 Your play history")
 
-    st.markdown("""
-    <div class="panel">
-        <p>
-        Every guess is compared with the hidden Pokémon across five
-        dimensions: generation, primary type, secondary type, height
-        and weight. Feedback helps narrow the possible answers.
-        </p>
-        <span class="pill" style="background:#ffe3ef;color:#a34e77">5 clue dimensions</span>
-        <span class="pill" style="background:#eee8ff;color:#68538f">±10% numeric tolerance</span>
-        <span class="pill" style="background:#e4f5ed;color:#39775b">8 maximum guesses</span>
-    </div>
-    """, unsafe_allow_html=True)
+    played = st.session_state.human_games_played
+    won = st.session_state.human_games_won
+    win_rate = won / played * 100 if played else 0
+
+    cols = st.columns(3)
+
+    with cols[0]:
+        metric("Games completed", played, "This browser session")
+
+    with cols[1]:
+        metric("Mysteries solved", won, "This browser session")
+
+    with cols[2]:
+        metric("Win rate", f"{win_rate:.1f}%", "Session-only statistic")
 
     st.info(
-        "Research note: the clue engine uses five attributes. "
-        "Numeric clues use a ±10% band; type clues distinguish "
-        "exact-slot, swapped-slot, and absent types."
+        "How the mystery works: feedback compares generation, primary type, "
+        "secondary type, height and weight. Numeric clues use the engine's "
+        "±10% tolerance. Each game allows up to 8 guesses."
     )
 
 
 # ==================================================
-# POKEDEX CHALLENGE
+# POKÉDEX CHALLENGE
 # ==================================================
 
 elif page == "Pokédex Challenge":
 
     hero(
         "FIELD TEST 01 · HUMAN VS MYSTERY",
-        "Pokédex Mystery Challenge",
-        "One secret Pokémon. Eight guesses. Use the clues "
-        "to identify the hidden species."
+        "Who's that Pokémon?",
+        "Choose a species, read the clues, and solve the mystery before "
+        "your attempts run out.",
     )
 
-    art_col, intro_col = st.columns([0.75, 2])
+    left, right = st.columns([1.55, 1])
 
-    with art_col:
-        with st.container(border=True):
-            pokemon_art("Eevee", "Your mystery companion", 180)
-
-    with intro_col:
+    with left:
         st.markdown("""
         <div class="panel">
-            <h3>🔍 Identify the mystery Pokémon</h3>
-            <p>
-            Choose a species from the Pokédex to submit a guess.
-            The secret remains hidden until you solve it or run
-            out of attempts. Study every clue carefully!
-            </p>
-            <span class="pill" style="background:#ffe3ef;color:#a34e77">Think strategically</span>
-            <span class="pill" style="background:#eee8ff;color:#68538f">Read every clue</span>
+            <h3>🌸 Welcome to the mystery meadow</h3>
+            <p>Every guess reveals five pieces of feedback. Green means a match;
+            directional clues help you understand numeric attributes.</p>
+            <span class="pill" style="background:#ffe3ef;color:#a34e77">5 clue dimensions</span>
+            <span class="pill" style="background:#eee8ff;color:#68538f">8 guesses max</span>
+            <span class="pill" style="background:#e4f5ed;color:#39775b">386 species</span>
         </div>
         """, unsafe_allow_html=True)
 
-    if "human_game" not in st.session_state:
+    with right:
+        art_card("Sylveon", "Your gameplay companion", 150)
+
+    if st.session_state.human_game is None:
         st.session_state.human_game = Game(POKEMON)
 
     game = st.session_state.human_game
 
-    left, right = st.columns([1.2, 1])
+    if game.status != "playing":
 
-    with left:
+        st.markdown("### ✨ Mystery complete")
 
-        guess_name = st.selectbox("Choose your Pokémon guess", NAMES)
+        if game.status == "won":
+            st.balloons()
+            st.success(f"You found **{game.secret['name']}**!")
+            pokemon_art(game.secret["name"], "Mystery Pokémon revealed", 190)
+        else:
+            st.error(
+                f"The mystery was **{game.secret['name']}**. "
+                "Better luck next time!"
+            )
+            pokemon_art(game.secret["name"], "The hidden Pokémon", 170)
 
-        if st.button(
-            "🔴 Submit guess",
-            use_container_width=True,
-            disabled=game.status != "playing"
-        ):
-            game.guess(BY_NAME[guess_name])
-            st.rerun()
-
-        if st.button("✨ Start a new mystery", use_container_width=True):
+        if st.button("🌷 Start another mystery", use_container_width=True):
             st.session_state.human_game = Game(POKEMON)
             st.rerun()
 
-    with right:
-
-        st.markdown("### 📍 Challenge progress")
+    else:
 
         remaining = MAX_GUESSES - len(game.history)
 
-        st.metric("Attempts remaining", remaining)
-        st.metric("Clues discovered", len(game.history))
-        st.progress(len(game.history) / MAX_GUESSES)
+        st.markdown("### 🎯 Your challenge")
 
-        if game.status == "won":
-            st.success(f"🎉 You found {game.secret['name']}!")
+        cols = st.columns(3)
 
-        elif game.status == "lost":
-            st.error(
-                f"The mystery was {game.secret['name']}. "
-                "Try another round!"
+        with cols[0]:
+            metric("Attempts left", remaining, f"of {MAX_GUESSES}")
+
+        with cols[1]:
+            metric("Guesses made", len(game.history), "Study the clues")
+
+        with cols[2]:
+            metric(
+                "Possible species",
+                len(filter_candidates(POKEMON, game.history)),
+                "Consistent with clues",
             )
 
+        st.progress(min(len(game.history) / MAX_GUESSES, 1.0))
+        st.caption(f"Attempt {len(game.history) + 1} of {MAX_GUESSES}")
+
+        guess_name = st.selectbox(
+            "Choose your Pokémon",
+            NAMES,
+            key="human_guess_select",
+            help="Search the list or type a species name.",
+        )
+
+        selected = BY_NAME[guess_name]
+
+        info1, info2, info3 = st.columns(3)
+
+        with info1:
+            metric("Generation", selected["gen"], "Selected Pokémon")
+
+        with info2:
+            metric("Primary type", selected["type1"], "Selected Pokémon")
+
+        with info3:
+            metric(
+                "Secondary type",
+                selected.get("type2") or "None",
+                "Selected Pokémon",
+            )
+
+        already_guessed = guess_name in [
+            g["name"] for g, _ in game.history
+        ]
+
+        if st.button(
+            "💗 Submit my guess",
+            use_container_width=True,
+            disabled=already_guessed,
+        ):
+            game.guess(selected)
+
+            if game.status in ("won", "lost"):
+                st.session_state.human_games_played += 1
+
+                if game.status == "won":
+                    st.session_state.human_games_won += 1
+
+                st.session_state.human_total_guesses += len(game.history)
+
+            st.rerun()
+
+        if game.history:
+            st.markdown("### 🧩 Clue trail")
+            render_clue_history(game.history)
         else:
-            st.info("The mystery Pokémon is waiting to be discovered!")
-
-    if game.history:
-
-        st.markdown("### 🧩 Your clue trail")
-
-        for idx, (guess, clue) in enumerate(game.history, 1):
-
-            with st.container(border=True):
-
-                st.markdown(
-                    f"**{idx}. {guess['name']}** · "
-                    f"Gen {guess['gen']} · "
-                    f"{guess['type1']}/{guess['type2']}"
-                )
-
-                cols = st.columns(5)
-
-                labels = [
-                    "Generation",
-                    "Type 1",
-                    "Type 2",
-                    "Height",
-                    "Weight"
-                ]
-
-                for col, label, value in zip(cols, labels, clue):
-                    with col:
-                        clue_chip(label, value)
+            st.markdown(
+                '<div class="panel"><h3>🌟 Your first clue is waiting</h3>'
+                '<p>Make your first guess to begin narrowing down the mystery.</p></div>',
+                unsafe_allow_html=True,
+            )
 
 
 # ==================================================
@@ -688,72 +767,50 @@ elif page == "AI Battle Arena":
     hero(
         "FIELD TEST 02 · INTELLIGENT AGENTS",
         "AI Battle Arena",
-        "Watch intelligent strategies investigate the same "
-        "hidden Pokémon and see how evidence changes the candidate pool."
+        "Pick a hidden species and let an intelligent strategy investigate it. "
+        "Reveal the AI's decisions one turn at a time.",
     )
 
-    art_col, intro_col = st.columns([0.75, 2])
+    roster = ["Gengar", "Piplup", "Mimikyu", "Sprigatito"]
+    cols = st.columns(4)
 
-    with art_col:
-        with st.container(border=True):
-            pokemon_art("Gengar", "The AI battle challenger", 185)
+    for col, name in zip(cols, roster):
+        with col:
+            art_card(name, name, 112)
 
-    with intro_col:
-        st.markdown("""
-        <div class="panel">
-            <h3>🤖 Intelligent agents are ready!</h3>
-            <p>
-            Select a secret Pokémon and let an AI strategy attempt
-            to identify it. Observe its guesses and track how the
-            candidate search space shrinks after each clue.
-            </p>
-            <span class="pill" style="background:#ffe3ef;color:#a34e77">Random</span>
-            <span class="pill" style="background:#eee8ff;color:#68538f">Filter</span>
-            <span class="pill" style="background:#e4f5ed;color:#39775b">Entropy</span>
-            <span class="pill" style="background:#fff0c7;color:#8a5b00">Minimax</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("### ⚙️ Configure your experiment")
+    st.markdown("### ⚙️ Set up the battle")
 
     left, right = st.columns(2)
 
     with left:
         secret = st.selectbox(
-            "Choose a secret Pokémon",
+            "Secret Pokémon",
             NAMES,
-            index=NAMES.index("Pikachu") if "Pikachu" in NAMES else 0
+            index=NAMES.index("Pikachu") if "Pikachu" in NAMES else 0,
+            key="battle_secret",
         )
 
     with right:
         strategy = st.selectbox(
-            "Choose an AI strategy",
-            [
-                "Random baseline",
-                "Filter-based",
-                "Entropy",
-                "Minimax"
-            ]
+            "AI strategy",
+            ["Random baseline", "Filter-based", "Entropy", "Minimax"],
+            key="battle_strategy",
         )
 
     st.caption(
-        "Select the same secret Pokémon when comparing different "
-        "strategies for a fair demonstration."
+        "For a fair comparison, keep the secret Pokémon the same "
+        "when switching strategies."
     )
 
-    if st.button("⚡ Run AI battle", use_container_width=True):
+    if st.button("⚡ Prepare AI battle", use_container_width=True):
 
-        if strategy == "Entropy":
-            solver = EntropySolver(POKEMON)
-
-        elif strategy == "Minimax":
-            solver = MinimaxSolver(POKEMON)
-
-        else:
-            solver = None
+        solver = (
+            EntropySolver(POKEMON) if strategy == "Entropy"
+            else MinimaxSolver(POKEMON) if strategy == "Minimax"
+            else None
+        )
 
         game = Game(POKEMON, secret=BY_NAME[secret])
-
         guessed = []
         rows = []
 
@@ -772,7 +829,7 @@ elif page == "AI Battle Arena":
             game.guess(guess)
             guessed.append(guess)
 
-            remaining = len(
+            remaining_candidates = len(
                 filter_candidates(POKEMON, game.history)
             )
 
@@ -780,79 +837,132 @@ elif page == "AI Battle Arena":
                 "Turn": len(rows) + 1,
                 "AI guess": guess["name"],
                 "Generation": guess["gen"],
-                "Types": guess["type1"] + "/" + guess["type2"],
-                "Candidates remaining": remaining,
-                "Outcome": game.status.title()
+                "Types": safe_types(guess),
+                "Candidates remaining": remaining_candidates,
+                "Outcome": game.status.title(),
             })
 
         st.session_state.last_battle = {
             "secret": secret,
             "strategy": strategy,
             "rows": rows,
-            "status": game.status
+            "status": game.status,
         }
 
-    if "last_battle" in st.session_state:
+        st.session_state.battle_step = 0
+        st.rerun()
 
-        battle = st.session_state.last_battle
+    battle = st.session_state.last_battle
 
-        guesses_used = len(battle["rows"])
+    if battle:
 
-        st.markdown("### 🏆 Battle report")
+        rows = battle["rows"]
+        step = min(st.session_state.battle_step, len(rows))
 
-        if battle["status"] == "won":
+        st.markdown("### 🧠 Watch the AI reason")
+
+        top = st.columns(3)
+
+        with top[0]:
+            metric("Strategy", battle["strategy"], "Selected agent")
+
+        with top[1]:
+            metric("Turn revealed", f"{step}/{len(rows)}", "Step-by-step playback")
+
+        with top[2]:
+            metric(
+                "Candidates left",
+                len(POKEMON) if step == 0
+                else rows[step - 1]["Candidates remaining"],
+                "After revealed turns",
+            )
+
+        if step == 0:
 
             st.markdown(
-                f"""
-                <div class="battle-result">
-                    <h3>🎉 Mystery solved!</h3>
-                    <p>
-                    {battle['strategy']} identified
-                    <b>{battle['secret']}</b> in
-                    <b>{guesses_used} guesses</b>.
-                    </p>
-                </div>
-                """,
-                unsafe_allow_html=True
+                '<div class="panel"><h3>🔎 The AI has '
+                f'{len(POKEMON)} possible answers</h3>'
+                '<p>Reveal the first decision to see how the agent begins its search.</p></div>',
+                unsafe_allow_html=True,
             )
 
         else:
 
+            current = rows[step - 1]
+
             st.markdown(
-                f"""
-                <div class="battle-result">
-                    <h3>⏳ Guess limit reached</h3>
-                    <p>
-                    The secret Pokémon was
-                    <b>{battle['secret']}</b>.
-                    The strategy used {guesses_used} guesses.
-                    </p>
-                </div>
-                """,
-                unsafe_allow_html=True
+                f'<div class="turn-card">'
+                f'<span class="pill" style="background:#ffe3ef;color:#a34e77">'
+                f'TURN {current["Turn"]}</span>'
+                f'<h3 style="margin:8px 0 2px">{html.escape(current["AI guess"])}</h3>'
+                f'<p style="margin:0;color:#81758e">Generation {current["Generation"]} · '
+                f'{html.escape(current["Types"])}</p>'
+                f'<b style="color:#c16c96">{current["Candidates remaining"]} candidates remain</b>'
+                f'</div>',
+                unsafe_allow_html=True,
             )
 
-        c1, c2, c3 = st.columns(3)
+            st.progress(step / len(rows))
 
-        with c1:
-            metric("AI strategy", battle["strategy"], "Selected solver")
+            st.dataframe(
+                pd.DataFrame(rows[:step]),
+                use_container_width=True,
+                hide_index=True,
+            )
 
-        with c2:
-            metric("Guesses used", guesses_used, "During this battle")
+        prev_col, next_col, reset_col = st.columns(3)
 
-        with c3:
-            metric("Initial candidates", len(POKEMON), "Search space")
+        with prev_col:
+            if st.button(
+                "← Previous turn",
+                disabled=step == 0,
+                use_container_width=True,
+            ):
+                st.session_state.battle_step = max(0, step - 1)
+                st.rerun()
 
-        st.markdown("### 📋 Step-by-step AI decisions")
+        with next_col:
+            if st.button(
+                "Reveal next turn →",
+                disabled=step >= len(rows),
+                use_container_width=True,
+            ):
+                st.session_state.battle_step = min(len(rows), step + 1)
+                st.rerun()
 
-        st.dataframe(
-            pd.DataFrame(battle["rows"]),
-            use_container_width=True,
-            hide_index=True
-        )
+        with reset_col:
+            if st.button("↺ Restart playback", use_container_width=True):
+                st.session_state.battle_step = 0
+                st.rerun()
+
+        if step == len(rows):
+
+            st.balloons()
+
+            if battle["status"] == "won":
+                st.markdown(
+                    f'<div class="battle-result"><h3>🎉 Mystery solved!</h3>'
+                    f'<p>{html.escape(battle["strategy"])} identified '
+                    f'<b>{html.escape(battle["secret"])}</b> in '
+                    f'<b>{len(rows)} guesses</b>.</p></div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.warning(
+                    f"Guess limit reached. The hidden Pokémon was {battle['secret']}."
+                )
+
+            pokemon_art(battle["secret"], "The mystery revealed", 170)
+
+        with st.expander("View the complete battle log"):
+            st.dataframe(
+                pd.DataFrame(rows),
+                use_container_width=True,
+                hide_index=True,
+            )
 
         counts = [len(POKEMON)] + [
-            row["Candidates remaining"] for row in battle["rows"]
+            row["Candidates remaining"] for row in rows
         ]
 
         fig, ax = plt.subplots(figsize=(9, 3.2))
@@ -862,19 +972,14 @@ elif page == "AI Battle Arena":
             counts,
             marker="o",
             linewidth=2.8,
-            markersize=7
+            markersize=7,
         )
 
-        ax.fill_between(
-            range(len(counts)),
-            counts,
-            alpha=0.12
-        )
-
+        ax.fill_between(range(len(counts)), counts, alpha=0.12)
         ax.set_xticks(range(len(counts)))
         ax.set_xlabel("After guess")
         ax.set_ylabel("Possible answers")
-        ax.set_title("How the candidate search space shrinks")
+        ax.set_title("Candidate search space")
         ax.grid(alpha=0.2)
 
         fig.tight_layout()
@@ -882,22 +987,17 @@ elif page == "AI Battle Arena":
         plt.close(fig)
 
         st.caption(
-            "Candidate counts are computed using the team's exact "
-            "feedback rules against the Pokémon dataset."
+            "Candidate counts use the project's actual clue rules and dataset."
         )
 
     else:
 
-        st.markdown("""
-        <div class="panel">
-            <h3>🤖 Ready for the AI experiment?</h3>
-            <p>
-            Choose a hidden Pokémon and a strategy, then run the battle.
-            The application will display every guess and show how the
-            candidate search space changes.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(
+            '<div class="panel"><h3>✨ Your AI challenger is ready</h3>'
+            '<p>Choose a secret and strategy, prepare the battle, '
+            'then reveal each AI decision.</p></div>',
+            unsafe_allow_html=True,
+        )
 
 
 # ==================================================
@@ -909,8 +1009,8 @@ elif page == "Professor’s Analytics":
     hero(
         "FIELD TEST 03 · PERFORMANCE EVALUATION",
         "Professor's Analytics Lab",
-        "A benchmark-focused view of the four implemented strategies. "
-        "Interpret the numbers, not just the winner."
+        "A visual scoreboard for the four implemented strategies. "
+        "Explore measured results and understand the trade-offs.",
     )
 
     path = os.path.join(RESULTS, "results_table.csv")
@@ -919,97 +1019,107 @@ elif page == "Professor’s Analytics":
 
         df = pd.read_csv(path)
 
-        best = df.loc[df["Avg guesses"].idxmin()]
+        required = {"Solver", "Avg guesses", "Worst case"}
 
-        c1, c2, c3 = st.columns(3)
+        if not required.issubset(df.columns):
 
-        with c1:
-            metric(
-                "Lowest average",
-                f"{best['Avg guesses']:.2f}",
-                str(best["Solver"]) + " strategy"
+            st.error(
+                "The benchmark CSV does not contain the expected columns: "
+                "Solver, Avg guesses, Worst case."
             )
 
-        with c2:
-            metric(
-                "Best worst case",
-                int(df["Worst case"].min()),
-                "Guesses"
+        else:
+
+            best = df.loc[df["Avg guesses"].idxmin()]
+
+            c1, c2, c3, c4 = st.columns(4)
+
+            with c1:
+                metric(
+                    "Lowest average",
+                    f"{best['Avg guesses']:.2f}",
+                    str(best["Solver"]),
+                )
+
+            with c2:
+                metric(
+                    "Best worst case",
+                    int(df["Worst case"].min()),
+                    "Guesses",
+                )
+
+            with c3:
+                metric("Strategies", len(df), "In saved benchmark")
+
+            with c4:
+                runs = int(df["Runs"].sum()) if "Runs" in df.columns else "—"
+                metric("Total runs", runs, "As recorded in CSV")
+
+            st.markdown("### 🏅 Benchmark scoreboard")
+
+            st.dataframe(
+                df,
+                use_container_width=True,
+                hide_index=True,
             )
 
-        with c3:
-            metric(
-                "Strategies compared",
-                len(df),
-                "Same dataset"
+            st.markdown("### 📊 Compare strategy performance")
+
+            fig, ax = plt.subplots(figsize=(9, 3.8))
+
+            bars = ax.bar(df["Solver"], df["Avg guesses"])
+
+            ax.set_ylabel("Average guesses")
+            ax.set_title("Average guesses by strategy")
+            ax.grid(axis="y", alpha=0.2)
+
+            for bar, value in zip(bars, df["Avg guesses"]):
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + 0.04,
+                    f"{value:.2f}",
+                    ha="center",
+                    fontweight="bold",
+                )
+
+            fig.tight_layout()
+            st.pyplot(fig)
+            plt.close(fig)
+
+            if "Win rate" in df.columns:
+
+                st.markdown("### 🌷 Win rate")
+
+                win_fig, win_ax = plt.subplots(figsize=(9, 3.0))
+
+                win_ax.bar(df["Solver"], df["Win rate"])
+                win_ax.set_ylabel("Win rate (%)")
+                win_ax.set_ylim(0, 105)
+                win_ax.grid(axis="y", alpha=0.2)
+
+                win_fig.tight_layout()
+                st.pyplot(win_fig)
+                plt.close(win_fig)
+
+            with st.expander("How the four strategies work"):
+
+                st.markdown("""
+                - **Random baseline:** chooses an unguessed Pokémon without using clue information.
+                - **Filter-based:** removes candidates inconsistent with observed feedback.
+                - **Entropy:** selects a guess expected to divide candidates into informative feedback groups.
+                - **Minimax:** minimizes the largest possible remaining candidate group.
+                """)
+
+            st.download_button(
+                "⬇ Download benchmark CSV",
+                df.to_csv(index=False).encode(),
+                file_name="pokemon_wordle_benchmark.csv",
+                mime="text/csv",
             )
 
-        st.markdown("### 🏅 Benchmark scoreboard")
-
-        st.dataframe(
-            df,
-            use_container_width=True,
-            hide_index=True
-        )
-
-        st.markdown("### 📊 Average guesses by strategy")
-
-        fig, ax = plt.subplots(figsize=(9, 3.8))
-
-        bars = ax.bar(
-            df["Solver"],
-            df["Avg guesses"]
-        )
-
-        ax.set_ylabel("Average guesses")
-        ax.set_title("Strategy performance comparison")
-        ax.grid(axis="y", alpha=0.2)
-
-        for bar, value in zip(bars, df["Avg guesses"]):
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                bar.get_height() + 0.04,
-                str(value),
-                ha="center",
-                fontweight="bold"
+            st.caption(
+                "These values are read from the project's saved results_table.csv."
             )
-
-        fig.tight_layout()
-        st.pyplot(fig)
-        plt.close(fig)
-
-        st.markdown("""
-        <div class="panel">
-            <h3>🧠 Understanding the strategies</h3>
-
-            <p><b>🎲 Random baseline:</b>
-            Ignores clue information and samples an unguessed Pokémon.</p>
-
-            <p><b>🔎 Filter-based:</b>
-            Removes every Pokémon inconsistent with all observed clues,
-            then chooses among survivors.</p>
-
-            <p><b>📐 Entropy:</b>
-            Chooses the guess expected to split remaining candidates
-            into the most informative feedback groups.</p>
-
-            <p><b>🎯 Minimax:</b>
-            Minimizes the size of the largest possible remaining
-            candidate group, with tie-breakers.</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.caption(
-            "Values shown are from the project's saved benchmark CSV. "
-            "Re-run benchmark.py to regenerate measurements."
-        )
-
-        st.download_button(
-            "⬇ Download benchmark CSV",
-            df.to_csv(index=False).encode(),
-            file_name="pokemon_wordle_benchmark.csv",
-            mime="text/csv"
-        )
 
     else:
 
@@ -1026,8 +1136,9 @@ else:
 
     hero(
         "FIELD TEST 04 · DATA INVESTIGATION",
-        "Pokédex Data Observatory",
-        "Explore the real dataset used by every solver in this project."
+        "The Pokédex collection",
+        "Browse the actual dataset used by every solver. Search by name "
+        "and filter species by generation and primary type.",
     )
 
     df = pd.DataFrame(POKEMON)
@@ -1043,43 +1154,78 @@ else:
     with c3:
         metric("Generations", df.gen.nunique(), "Generation values")
 
-    st.markdown("### 🔬 Explore dataset distributions")
+    st.markdown("### 🔎 Find a Pokémon")
 
-    left, right = st.columns(2)
+    f1, f2, f3 = st.columns([1.5, 1, 1])
 
-    with left:
-        st.markdown("**Primary type distribution**")
-        st.bar_chart(df.type1.value_counts().sort_values())
+    with f1:
+        search = st.text_input(
+            "Search species",
+            placeholder="Try Pikachu, Eevee...",
+        )
 
-    with right:
-        st.markdown("**Species by generation**")
-        st.bar_chart(df.gen.value_counts().sort_index())
+    with f2:
+        generations = sorted(df["gen"].dropna().unique().tolist())
+        selected_gen = st.selectbox("Generation", ["All"] + generations)
 
-    st.markdown("### 🔎 Search the Pokédex")
+    with f3:
+        types = sorted(df["type1"].dropna().unique().tolist())
+        selected_type = st.selectbox("Primary type", ["All"] + types)
 
-    search = st.text_input(
-        "Search by Pokémon species name",
-        placeholder="For example, Pikachu..."
-    )
+    view = df.copy()
 
-    view = (
-        df[df.name.str.contains(search, case=False, na=False)]
-        if search else df
-    )
+    if search:
+        view = view[
+            view["name"].str.contains(search, case=False, na=False)
+        ]
 
-    st.caption(f"Showing {len(view)} of {len(df)} Pokémon")
+    if selected_gen != "All":
+        view = view[view["gen"] == selected_gen]
+
+    if selected_type != "All":
+        view = view[view["type1"] == selected_type]
+
+    st.caption(f"Showing {len(view)} of {len(df)} species")
 
     st.dataframe(
         view.sort_values("name"),
         use_container_width=True,
-        hide_index=True
+        hide_index=True,
     )
 
+    if not view.empty:
+
+        st.markdown("### 💗 Featured Pokédex entry")
+
+        chosen = st.selectbox(
+            "Choose a record to preview",
+            view["name"].tolist(),
+            key="dex_preview",
+        )
+
+        record = BY_NAME[chosen]
+
+        art_col, detail_col = st.columns([1, 2])
+
+        with art_col:
+            art_card(chosen, chosen, 190)
+
+        with detail_col:
+            st.markdown(
+                f'<div class="panel"><h3>{html.escape(chosen)}</h3>'
+                f'<p><b>Generation:</b> {html.escape(str(record["gen"]))}</p>'
+                f'<p><b>Type 1:</b> {html.escape(str(record["type1"]))}</p>'
+                f'<p><b>Type 2:</b> {html.escape(str(record.get("type2") or "None"))}</p>'
+                f'<p><b>Height:</b> {html.escape(str(record.get("height", "—")))}</p>'
+                f'<p><b>Weight:</b> {html.escape(str(record.get("weight", "—")))}</p></div>',
+                unsafe_allow_html=True,
+            )
+
     st.download_button(
-        "⬇ Export dataset CSV",
-        df.to_csv(index=False).encode(),
-        file_name="pokemon_dataset.csv",
-        mime="text/csv"
+        "⬇ Export filtered dataset",
+        view.to_csv(index=False).encode(),
+        file_name="pokemon_dataset_filtered.csv",
+        mime="text/csv",
     )
 
 
@@ -1087,13 +1233,9 @@ else:
 # FOOTER
 # ==================================================
 
-st.markdown(
-    """
-    <div class="footer-text">
-        💗 POKÉMON WORDLE · GROUP RESEARCH PROJECT
-        <br>
-        BUILT FOR INTELLIGENT EXPERIMENTATION ✦
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div class="footer-text">
+    💗 POKÉMON WORDLE · GROUP RESEARCH PROJECT<br>
+    BUILT FOR INTELLIGENT EXPERIMENTATION ✦
+</div>
+""", unsafe_allow_html=True)
