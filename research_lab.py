@@ -34,7 +34,8 @@ st.set_page_config(
 # MODERN KAWAII DESIGN SYSTEM
 # --------------------------------------------------
 
-
+st.markdown("""
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
 
 :root {
@@ -261,6 +262,8 @@ div[data-testid="stDataFrame"] {
 
 hr { border-color: #f0e1eb; }
 footer, #MainMenu { visibility: hidden; }
+</style>
+""", unsafe_allow_html=True)
 
 
 # --------------------------------------------------
