@@ -1,6 +1,4 @@
 
-
-
 import os
 import html
 import pandas as pd
@@ -14,9 +12,9 @@ from entropy_solver import EntropySolver
 from minimax_solver import MinimaxSolver
 
 
-# ==================================================
+# ============================================================
 # CONFIGURATION
-# ==================================================
+# ============================================================
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data", "pokemon.csv")
@@ -27,16 +25,16 @@ BY_NAME = {p["name"]: p for p in POKEMON}
 NAMES = sorted(BY_NAME)
 
 st.set_page_config(
-    page_title="Pokémon Wordle · Professor Oak's Lab",
-    page_icon="💗",
+    page_title="POKEMON · Wordle Research Lab",
+    page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
-# ==================================================
-# POKÉMON HOME-STYLE ARTWORK
-# ==================================================
+# ============================================================
+# POKEMON HOME ARTWORK
+# ============================================================
 
 ART_IDS = {
     "Bulbasaur": 1, "Ivysaur": 2, "Venusaur": 3,
@@ -62,116 +60,166 @@ ART_URL = (
 )
 
 
-# ==================================================
-# PREMIUM KAWAII DESIGN
-# ==================================================
+def pokemon_url(name):
+    pokemon_id = ART_IDS.get(name)
+    if pokemon_id:
+        return ART_URL.format(pokemon_id=pokemon_id)
+    return None
+
+
+# ============================================================
+# PREMIUM POKEMON INTERFACE
+# ============================================================
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
 
 :root {
-    --ink: #30283f;
-    --muted: #81758e;
-    --pink: #e99aba;
-    --pink-deep: #cc7099;
-    --pink-soft: #fff0f6;
-    --lavender: #eee8ff;
-    --border: #f0dfeb;
+    --pink: #F5A9C7;
+    --pink-dark: #D96E9B;
+    --pink-light: #FFF0F6;
+    --lavender: #E9DFFF;
+    --lavender-dark: #BDA9E8;
+    --cream: #FFFAF5;
+    --plum: #49344E;
+    --muted: #927F98;
+    --line: #F0DCE8;
 }
 
 html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif !important;
-    color: var(--ink);
+    color: var(--plum);
 }
 
 .stApp {
     background:
-        radial-gradient(ellipse at 3% 5%, #ffeaf3 0%, transparent 32%),
-        radial-gradient(ellipse at 96% 8%, #eee9ff 0%, transparent 30%),
-        #fffdfb;
+        radial-gradient(ellipse at 5% 5%, #FFE7F1 0%, transparent 34%),
+        radial-gradient(ellipse at 95% 15%, #EEE7FF 0%, transparent 32%),
+        #FFFAF7;
 }
 
 .block-container {
-    max-width: 1260px;
-    padding-top: 1.6rem;
+    max-width: 1320px;
+    padding-top: 1.3rem;
     padding-bottom: 3rem;
 }
 
 h1, h2, h3, h4 {
-    color: var(--ink) !important;
+    color: var(--plum) !important;
     font-weight: 900 !important;
 }
 
-p, li, label {
-    color: var(--ink);
+h1, h2 {
+    font-family: 'Fredoka', 'Nunito', sans-serif !important;
 }
 
-/* SIDEBAR */
+p, label, li {
+    color: var(--plum);
+}
+
+header[data-testid="stHeader"] {
+    background: transparent;
+}
+
+/* HIDE DEFAULT STREAMLIT ELEMENTS */
+
+#MainMenu, footer {
+    visibility: hidden;
+}
 
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #fff0f6 0%, #f1ebff 100%);
-    border-right: 1px solid #f1dce8;
+    display: none;
 }
 
-[data-testid="stSidebar"] * {
-    color: #59445f;
-    font-weight: 700;
-}
+/* TOP BRAND */
 
-[data-testid="stSidebar"] [data-testid="stRadio"] > div {
-    gap: 9px;
-}
-
-[data-testid="stSidebar"] [data-testid="stRadio"] label {
-    background: rgba(255,255,255,0.5);
-    border: 1px solid transparent;
-    border-radius: 15px;
-    padding: 10px 13px;
-    transition: all .2s ease;
-}
-
-[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
-    background: white;
-    border-color: #f2c8dc;
-    transform: translateX(3px);
-}
-
-[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
-    background: linear-gradient(135deg, #f9c8dc, #f0dff5);
-    border: 1px solid #edb6d0;
-    box-shadow: 0 5px 15px #d98bae25;
-    color: #753e60 !important;
-}
-
-/* BRAND */
-
-.lab-brand {
-    text-align: center;
-    padding: 12px 5px 20px;
-}
-
-.lab-brand-ball {
-    width: 66px;
-    height: 66px;
-    margin: auto;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #fff, #f5c8dc);
-    box-shadow: 0 6px 0 #e8b4ce, 0 12px 22px #d99cbd55;
+.brand-wrap {
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 35px;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 0 12px;
 }
 
-.lab-brand h3 {
-    margin: 15px 0 3px;
-    color: #70425e !important;
+.brand-icon {
+    width: 47px;
+    height: 47px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #FFF, #F5BDD5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 27px;
+    box-shadow: 0 4px 0 #E8A8C5, 0 8px 18px #D58BAF40;
 }
 
-.lab-brand p {
-    color: #92788d;
-    font-size: 12px;
+.brand-name {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2.15rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #65415F;
+    line-height: 1.1;
+}
+
+.brand-subtitle {
+    text-align: center;
+    color: #A1819B;
+    font-size: 10px;
+    letter-spacing: 3px;
+    font-weight: 900;
+    margin-top: 2px;
+}
+
+/* TOP NAVIGATION */
+
+div[data-testid="stRadio"] > div {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+div[data-testid="stRadio"] label {
+    background: rgba(255,255,255,.72);
+    border: 1px solid #F0DDE8;
+    border-radius: 999px;
+    padding: 8px 17px;
+    transition: all .2s ease;
+    box-shadow: 0 3px 9px #9D74900C;
+}
+
+div[data-testid="stRadio"] label:hover {
+    background: #FFF0F6;
+    border-color: #E8A8C5;
+    transform: translateY(-2px);
+}
+
+div[data-testid="stRadio"] label:has(input:checked) {
+    background: linear-gradient(135deg, #F6B8D1, #E8CFF5);
+    border: 1px solid #E7A8C7;
+    box-shadow: 0 4px 0 #DBA4C0, 0 7px 15px #D98BAE30;
+}
+
+div[data-testid="stRadio"] label p {
+    color: #63465F !important;
+    font-weight: 900 !important;
+    font-size: .85rem;
+}
+
+div[data-testid="stRadio"] input {
+    display: none;
+}
+
+/* BRAND DIVIDER */
+
+.nav-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #EBCBD9, #DCCDF3, transparent);
+    margin: 12px 0 27px;
 }
 
 /* HERO */
@@ -179,50 +227,53 @@ p, li, label {
 .lab-hero {
     position: relative;
     overflow: hidden;
-    padding: 28px 30px;
-    border-radius: 26px;
-    background: linear-gradient(120deg, #fff0f6, #f0ebff 75%, #fff9fc);
-    border: 1px solid #f1dfeb;
-    box-shadow: 0 12px 30px #9b73951a;
-    margin-bottom: 20px;
+    padding: 32px 35px;
+    border-radius: 28px;
+    background: linear-gradient(115deg, #FFF0F6, #F1EBFF 68%, #FFF8FC);
+    border: 1px solid #F0DDE9;
+    box-shadow: 0 7px 0 #F2E1EB, 0 14px 30px #8E648519;
+    margin-bottom: 24px;
 }
 
 .lab-hero:after {
     content: "✦";
     position: absolute;
-    right: 35px;
-    top: 4px;
-    font-size: 82px;
-    color: #e9b9d2;
+    right: 42px;
+    top: 0;
+    color: #DDB3D1;
+    font-size: 100px;
     opacity: .5;
 }
 
 .lab-hero .eyebrow {
-    color: #c16c96;
+    font-size: .72rem;
+    letter-spacing: 3px;
     font-weight: 900;
-    letter-spacing: 2px;
-    font-size: .76rem;
+    color: #C06C98;
 }
 
 .lab-hero h1 {
-    font-size: 2.15rem;
-    margin: 7px 0;
+    font-size: 2.5rem;
+    margin: 8px 0 5px;
 }
 
 .lab-hero p {
-    color: #786d83;
-    max-width: 760px;
+    color: #84758E;
+    max-width: 780px;
+    font-size: 1rem;
     margin-bottom: 0;
+    line-height: 1.6;
 }
 
-/* CARDS */
+/* PANELS */
 
 .panel {
-    background: linear-gradient(145deg, #fff, #fff8fc);
-    border: 1px solid #f0e2eb;
-    border-radius: 22px;
+    background: linear-gradient(145deg, #FFFFFF, #FFF8FC);
+    border: 1px solid #F0E0EA;
+    border-radius: 23px;
     padding: 21px;
-    box-shadow: 0 5px 0 #f3e4ed, 0 12px 25px #8c64851c;
+    box-shadow: 0 5px 0 #F4E6EE, 0 12px 24px #86618413;
+    height: 100%;
 }
 
 .panel h3 {
@@ -230,50 +281,46 @@ p, li, label {
 }
 
 .art-panel {
-    background: radial-gradient(circle at 50% 42%, #fff 0%, #fff0f6 65%, #eee8ff 100%);
-    border: 1px solid #f0dfeb;
+    background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, #FFF0F6 68%, #EEE8FF 100%);
+    border: 1px solid #F0DFEB;
     border-radius: 25px;
-    padding: 10px 14px;
-    box-shadow: 0 6px 0 #f1e1eb, 0 15px 28px #8c64851c;
+    padding: 12px;
+    box-shadow: 0 5px 0 #F0E0EA, 0 12px 24px #8C64851B;
     text-align: center;
-}
-
-.art-panel img {
-    filter: drop-shadow(0 12px 10px #8c648530);
 }
 
 /* METRICS */
 
 .metric {
-    background: linear-gradient(145deg, #fff, #fff5fa);
-    border: 1px solid #f1e1eb;
-    border-radius: 19px;
-    padding: 16px;
-    box-shadow: 0 5px 0 #f2e4ec, 0 10px 20px #9b739515;
+    background: linear-gradient(145deg, #FFFFFF, #FFF4F9);
+    border: 1px solid #F1E0EA;
+    border-radius: 20px;
+    padding: 17px;
+    box-shadow: 0 4px 0 #F2E4EC, 0 9px 18px #9B739515;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    min-height: 104px;
+    min-height: 108px;
 }
 
 .metric small {
-    color: #897b91;
-    font-weight: 800;
+    color: #95849B;
+    font-weight: 900;
 }
 
 .metric b {
-    color: #cf719b;
+    color: #CD719B;
     font-size: 1.65rem;
     font-weight: 900;
     overflow-wrap: anywhere;
 }
 
 .metric span {
-    color: #8a90a3;
+    color: #93869D;
     font-size: .8rem;
 }
 
-/* PILLS */
+/* TAGS */
 
 .pill {
     display: inline-block;
@@ -287,19 +334,19 @@ p, li, label {
 /* BUTTONS */
 
 .stButton > button {
-    background: linear-gradient(135deg, #e99aba, #d97ca5);
+    background: linear-gradient(135deg, #F3A9C7, #DB82AC);
     color: white !important;
-    border: 1px solid #df8caf;
+    border: 1px solid #E4A0BD;
     border-radius: 15px;
-    padding: .66rem 1rem;
+    padding: .65rem 1rem;
     font-weight: 900;
-    box-shadow: 0 4px 0 #c96e96, 0 8px 17px #d98bae30;
-    transition: all .18s ease;
+    box-shadow: 0 4px 0 #C96F98, 0 8px 16px #D98BAE30;
+    transition: all .2s ease;
 }
 
 .stButton > button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 0 #c96e96, 0 12px 20px #d98bae40;
+    box-shadow: 0 6px 0 #C96F98, 0 11px 19px #D98BAE40;
 }
 
 .stButton > button:disabled {
@@ -307,132 +354,159 @@ p, li, label {
 }
 
 .stDownloadButton > button {
-    background: #eee8ff;
-    color: #51416f !important;
-    border: 1px solid #dcd0fa;
-    border-radius: 12px;
-    font-weight: 800;
+    background: linear-gradient(135deg, #EDE5FF, #F5EFFF);
+    color: #604C7E !important;
+    border: 1px solid #DCD0F4;
+    border-radius: 13px;
+    font-weight: 900;
 }
 
-div[data-testid="stMetric"] {
-    background: white;
-    border: 1px solid var(--border);
-    padding: 15px;
-    border-radius: 18px;
-    box-shadow: 0 5px 18px #3330440a;
-}
-
-div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    color: #cf719b !important;
-    font-weight: 900 !important;
-}
+/* INPUTS */
 
 div[data-testid="stSelectbox"] > div > div,
 div[data-testid="stTextInput"] input {
     background: white;
-    border-radius: 12px;
-    border-color: #edd9e5;
-    color: var(--ink);
+    border-radius: 13px;
+    border-color: #EBD8E5;
+    color: var(--plum);
 }
 
+div[data-testid="stSelectbox"] > div > div:focus-within,
+div[data-testid="stTextInput"] input:focus {
+    border-color: #D88DB1;
+    box-shadow: 0 0 0 2px #F8DCE8;
+}
+
+/* DATAFRAMES */
+
 div[data-testid="stDataFrame"] {
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    border: 1px solid #F0DFEB;
+    border-radius: 16px;
     overflow: hidden;
 }
 
-.stAlert, [data-testid="stExpander"] {
-    border-radius: 15px;
+/* STREAMLIT METRICS */
+
+div[data-testid="stMetric"] {
+    background: white;
+    border: 1px solid #F0DFEB;
+    padding: 15px;
+    border-radius: 18px;
+    box-shadow: 0 5px 16px #3330440A;
 }
 
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: #CF719B !important;
+    font-weight: 900 !important;
+}
+
+/* EXPANDERS */
+
 [data-testid="stExpander"] {
-    background: white;
-    border: 1px solid var(--border);
+    background: #FFFFFF;
+    border: 1px solid #F0DFEB;
+    border-radius: 16px;
+}
+
+/* GAME COMPONENTS */
+
+.turn-card {
+    background: linear-gradient(120deg, #FFFFFF, #FFF4F9);
+    border: 1px solid #F0DFEB;
+    border-radius: 19px;
+    padding: 16px;
+    margin: 9px 0;
+    box-shadow: 0 4px 12px #8C648510;
 }
 
 .battle-result {
-    background: linear-gradient(120deg, #fff0f6, #f0ebff);
-    border: 1px solid #efd9e8;
-    border-radius: 22px;
-    padding: 22px;
-    box-shadow: 0 7px 20px #9b73951a;
-}
-
-.game-tile {
-    background: white;
-    border: 1px solid #f0dce9;
-    border-radius: 15px;
-    padding: 12px;
-    text-align: center;
-    box-shadow: 0 4px 0 #f4e5ed;
-}
-
-.game-tile b {
-    display: block;
-    color: #6d4967;
-    font-size: 1.02rem;
-}
-
-.turn-card {
-    background: linear-gradient(120deg, #fff, #fff6fb);
-    border: 1px solid #f0dfeb;
-    border-radius: 17px;
-    padding: 13px 16px;
-    margin: 8px 0;
+    background: linear-gradient(120deg, #FFF0F6, #F0EBFF);
+    border: 1px solid #EED9E8;
+    border-radius: 23px;
+    padding: 23px;
+    box-shadow: 0 8px 20px #9B73951A;
 }
 
 .footer-text {
     text-align: center;
-    color: #a18ca3;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    padding: 26px 0 8px;
+    color: #A18CA3;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 30px 0 10px;
+}
+
+.stProgress > div > div > div > div {
+    background: linear-gradient(90deg, #F3A9C7, #BBA6E9);
+}
+
+.stAlert {
+    border-radius: 16px;
 }
 
 hr {
-    border-color: #f0e1eb;
+    border-color: #F0E1EB;
 }
 
-footer, #MainMenu {
-    visibility: hidden;
+@media (max-width: 700px) {
+    .brand-name {
+        font-size: 1.7rem;
+    }
+
+    .lab-hero {
+        padding: 23px;
+    }
+
+    .lab-hero h1 {
+        font-size: 1.9rem;
+    }
+
+    div[data-testid="stRadio"] label {
+        padding: 6px 10px;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
 
-# ==================================================
+# ============================================================
 # REUSABLE COMPONENTS
-# ==================================================
+# ============================================================
 
 def hero(kicker, title, subtitle):
     st.markdown(
-        f'<div class="lab-hero"><div class="eyebrow">{kicker}</div>'
-        f'<h1>{title}</h1><p>{subtitle}</p></div>',
+        f'<div class="lab-hero">'
+        f'<div class="eyebrow">{html.escape(kicker)}</div>'
+        f'<h1>{html.escape(title)}</h1>'
+        f'<p>{html.escape(subtitle)}</p>'
+        f'</div>',
         unsafe_allow_html=True,
     )
 
 
 def metric(label, value, sub=""):
     st.markdown(
-        f'<div class="metric"><small>{html.escape(str(label))}</small>'
-        f'<b>{html.escape(str(value))}</b><span>{html.escape(str(sub))}</span></div>',
+        f'<div class="metric">'
+        f'<small>{html.escape(str(label))}</small>'
+        f'<b>{html.escape(str(value))}</b>'
+        f'<span>{html.escape(str(sub))}</span>'
+        f'</div>',
         unsafe_allow_html=True,
     )
 
 
 def clue_chip(label, value):
     colors = {
-        "green": ("#d9f7e8", "#126b43", "✓"),
-        "amber": ("#fff0c7", "#8a5b00", "◆"),
-        "grey": ("#e9ebf1", "#606779", "×"),
-        "up": ("#dcecff", "#245b9b", "↑"),
-        "down": ("#ffe1df", "#a43e39", "↓"),
+        "green": ("#D9F7E8", "#126B43", "✓"),
+        "amber": ("#FFF0C7", "#8A5B00", "◆"),
+        "grey": ("#E9EBF1", "#606779", "×"),
+        "up": ("#DCEBFF", "#245B9B", "↑"),
+        "down": ("#FFE1DF", "#A43E39", "↓"),
     }
 
     bg, fg, symbol = colors.get(
         str(value).lower(),
-        ("#eee", "#333", "•")
+        ("#EEEEEE", "#333333", "•")
     )
 
     st.markdown(
@@ -444,21 +518,15 @@ def clue_chip(label, value):
 
 
 def pokemon_art(name, caption=None, width=190):
-    """Show genuine Pokémon HOME-style artwork for mapped Pokédex entries."""
-    pokemon_id = ART_IDS.get(name)
+    url = pokemon_url(name)
 
-    if pokemon_id:
-        st.image(
-            ART_URL.format(pokemon_id=pokemon_id),
-            caption=caption,
-            width=width,
-        )
+    if url:
+        st.image(url, caption=caption, width=width)
     else:
         st.markdown(
-            f'<div style="padding:25px 5px;text-align:center;color:#9b7893">'
-            f'<div style="font-size:42px">✦</div>'
-            f'<b>{html.escape(name)}</b>'
-            f'<div style="font-size:12px">Pokédex entry</div></div>',
+            f'<div style="padding:25px;text-align:center;color:#9B7893">'
+            f'<div style="font-size:38px">✦</div>'
+            f'<b>{html.escape(name)}</b></div>',
             unsafe_allow_html=True,
         )
 
@@ -511,62 +579,85 @@ def init_session():
 init_session()
 
 
-# ==================================================
-# SIDEBAR NAVIGATION
-# ==================================================
+# ============================================================
+# TOP BRANDING AND NAVIGATION
+# ============================================================
 
-with st.sidebar:
-    st.markdown("""
-    <div class="lab-brand">
-        <div class="lab-brand-ball">🔴</div>
-        <h3>Professor Oak's Lab</h3>
-        <p>Pokédex Intelligence · Strategy Testing</p>
+st.markdown("""
+<div class="brand-wrap">
+    <div class="brand-icon">⚡</div>
+    <div>
+        <div class="brand-name">POKEMON</div>
+        <div class="brand-subtitle">WORDLE RESEARCH LAB</div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-    page = st.radio(
-        "LAB NAVIGATION",
-        [
-            "Welcome Hub",
-            "Pokédex Challenge",
-            "AI Battle Arena",
-            "Professor’s Analytics",
-            "Dataset Explorer",
-        ],
-        label_visibility="collapsed",
-    )
+st.markdown(
+    '<div style="text-align:center;color:#A78BA5;'
+    'font-size:11px;letter-spacing:2px;font-weight:900">'
+    '✦ PROFESSOR OAK’S INTELLIGENCE LABORATORY ✦'
+    '</div>',
+    unsafe_allow_html=True,
+)
 
-    st.divider()
-    st.caption(f"TEAM PROJECT · {len(POKEMON)} SPECIES · 4 STRATEGIES")
-    st.caption("Choose a lab station to explore.")
+st.markdown("<br>", unsafe_allow_html=True)
+
+pages = [
+    "🏠  Home",
+    "🎮  Pokédex",
+    "🤖  AI Battle",
+    "📊  Analytics",
+    "📚  Dataset",
+]
+
+selected_page = st.radio(
+    "Navigation",
+    pages,
+    horizontal=True,
+    label_visibility="collapsed",
+)
+
+st.markdown('<div class="nav-divider"></div>', unsafe_allow_html=True)
+
+page_map = {
+    "🏠  Home": "Welcome Hub",
+    "🎮  Pokédex": "Pokédex Challenge",
+    "🤖  AI Battle": "AI Battle Arena",
+    "📊  Analytics": "Professor’s Analytics",
+    "📚  Dataset": "Dataset Explorer",
+}
+
+page = page_map[selected_page]
 
 
-# ==================================================
+# ============================================================
 # WELCOME HUB
-# ==================================================
+# ============================================================
 
 if page == "Welcome Hub":
 
     hero(
-        "✦ WELCOME, RESEARCHER ✦",
-        "A little world of Pokémon & strategy",
-        "Enter the laboratory, solve a mystery, watch intelligent agents "
-        "think, and explore the data behind every decision.",
+        "✦ WELCOME, TRAINER ✦",
+        "Welcome to the Pokémon World!",
+        "A world of mystery, intelligent guessing and Pokémon discovery. "
+        "Explore the Pokédex, challenge yourself and watch AI strategies compete.",
     )
 
     roster = ["Eevee", "Pikachu", "Vulpix", "Piplup", "Sylveon"]
+
     cols = st.columns(len(roster))
 
     for col, name in zip(cols, roster):
         with col:
             art_card(name, name, 125)
 
-    st.markdown("### ✨ Your laboratory dashboard")
+    st.markdown("## ✨ Research Lab Overview")
 
     stats = [
-        ("Pokémon indexed", len(POKEMON), "Species in the real dataset"),
+        ("Pokémon indexed", len(POKEMON), "Species in the dataset"),
         ("Generations", len(set(p["gen"] for p in POKEMON)), "Across the Pokédex"),
-        ("Clue dimensions", 5, "Generation · Types · Height · Weight"),
+        ("Clue dimensions", 5, "Attributes used by the game"),
         ("Guess limit", MAX_GUESSES, "Attempts per mystery"),
     ]
 
@@ -576,17 +667,17 @@ if page == "Welcome Hub":
         with col:
             metric(*item)
 
-    st.markdown("### 🧭 Choose your adventure")
+    st.markdown("## 🌸 Explore the Laboratory")
 
     cards = [
-        ("🎮", "Pokédex Challenge", "You vs. a hidden Pokémon",
-         "Use clues and solve it in limited guesses."),
-        ("🤖", "AI Battle Arena", "Watch the strategies think",
-         "Compare guesses and candidate reduction."),
-        ("📊", "Professor's Analytics", "Explore measured performance",
-         "Review benchmark results and charts."),
-        ("📚", "Dataset Explorer", "Browse the real Pokédex",
-         "Search and inspect the dataset records."),
+        ("🎮", "Pokédex Challenge", "Human vs Mystery",
+         "Solve a hidden Pokémon using five clue dimensions."),
+        ("🤖", "AI Battle Arena", "Intelligent Guessing",
+         "Watch four strategies investigate the same mystery."),
+        ("📊", "Professor's Analytics", "Performance Insights",
+         "Compare measured results from benchmark experiments."),
+        ("📚", "Dataset Explorer", "Pokédex Collection",
+         "Search, filter and inspect the real dataset."),
     ]
 
     cols = st.columns(2)
@@ -594,13 +685,16 @@ if page == "Welcome Hub":
     for col, (emoji, title, tagline, desc) in zip(cols, cards):
         with col:
             st.markdown(
-                f'<div class="panel"><div style="font-size:28px">{emoji}</div>'
-                f'<h3>{title}</h3><b style="color:#c16c96">{tagline}</b>'
-                f'<p>{desc}</p></div>',
+                f'<div class="panel">'
+                f'<div style="font-size:29px">{emoji}</div>'
+                f'<h3>{html.escape(title)}</h3>'
+                f'<b style="color:#C16C96">{html.escape(tagline)}</b>'
+                f'<p>{html.escape(desc)}</p>'
+                f'</div>',
                 unsafe_allow_html=True,
             )
 
-    st.markdown("### 💗 Your play history")
+    st.markdown("## 💗 Trainer Statistics")
 
     played = st.session_state.human_games_played
     won = st.session_state.human_games_won
@@ -609,32 +703,32 @@ if page == "Welcome Hub":
     cols = st.columns(3)
 
     with cols[0]:
-        metric("Games completed", played, "This browser session")
+        metric("Games completed", played, "Current session")
 
     with cols[1]:
-        metric("Mysteries solved", won, "This browser session")
+        metric("Mysteries solved", won, "Current session")
 
     with cols[2]:
-        metric("Win rate", f"{win_rate:.1f}%", "Session-only statistic")
+        metric("Win rate", f"{win_rate:.1f}%", "Current session")
 
     st.info(
-        "How the mystery works: feedback compares generation, primary type, "
+        "How to play: feedback compares generation, primary type, "
         "secondary type, height and weight. Numeric clues use the engine's "
         "±10% tolerance. Each game allows up to 8 guesses."
     )
 
 
-# ==================================================
+# ============================================================
 # POKÉDEX CHALLENGE
-# ==================================================
+# ============================================================
 
 elif page == "Pokédex Challenge":
 
     hero(
         "FIELD TEST 01 · HUMAN VS MYSTERY",
-        "Who's that Pokémon?",
-        "Choose a species, read the clues, and solve the mystery before "
-        "your attempts run out.",
+        "Who's That Pokémon?",
+        "Think carefully, follow the clues and identify the hidden Pokémon "
+        "before your attempts run out.",
     )
 
     left, right = st.columns([1.55, 1])
@@ -642,12 +736,12 @@ elif page == "Pokédex Challenge":
     with left:
         st.markdown("""
         <div class="panel">
-            <h3>🌸 Welcome to the mystery meadow</h3>
+            <h3>🌸 Welcome to the Mystery Meadow</h3>
             <p>Every guess reveals five pieces of feedback. Green means a match;
             directional clues help you understand numeric attributes.</p>
-            <span class="pill" style="background:#ffe3ef;color:#a34e77">5 clue dimensions</span>
-            <span class="pill" style="background:#eee8ff;color:#68538f">8 guesses max</span>
-            <span class="pill" style="background:#e4f5ed;color:#39775b">386 species</span>
+            <span class="pill" style="background:#FFE3EF;color:#A34E77">5 clue dimensions</span>
+            <span class="pill" style="background:#EEE8FF;color:#68538F">8 guesses max</span>
+            <span class="pill" style="background:#E4F5ED;color:#39775B">386 species</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -661,7 +755,7 @@ elif page == "Pokédex Challenge":
 
     if game.status != "playing":
 
-        st.markdown("### ✨ Mystery complete")
+        st.markdown("### ✨ Mystery Complete")
 
         if game.status == "won":
             st.balloons()
@@ -674,7 +768,7 @@ elif page == "Pokédex Challenge":
             )
             pokemon_art(game.secret["name"], "The hidden Pokémon", 170)
 
-        if st.button("🌷 Start another mystery", use_container_width=True):
+        if st.button("🌷 Start Another Mystery", use_container_width=True):
             st.session_state.human_game = Game(POKEMON)
             st.rerun()
 
@@ -682,7 +776,7 @@ elif page == "Pokédex Challenge":
 
         remaining = MAX_GUESSES - len(game.history)
 
-        st.markdown("### 🎯 Your challenge")
+        st.markdown("### 🎯 Your Challenge")
 
         cols = st.columns(3)
 
@@ -731,7 +825,7 @@ elif page == "Pokédex Challenge":
         ]
 
         if st.button(
-            "💗 Submit my guess",
+            "💗 Submit My Guess",
             use_container_width=True,
             disabled=already_guessed,
         ):
@@ -748,27 +842,29 @@ elif page == "Pokédex Challenge":
             st.rerun()
 
         if game.history:
-            st.markdown("### 🧩 Clue trail")
+            st.markdown("### 🧩 Clue Trail")
             render_clue_history(game.history)
         else:
             st.markdown(
-                '<div class="panel"><h3>🌟 Your first clue is waiting</h3>'
-                '<p>Make your first guess to begin narrowing down the mystery.</p></div>',
+                '<div class="panel">'
+                '<h3>🌟 Your First Clue Is Waiting</h3>'
+                '<p>Make your first guess to begin narrowing down the mystery.</p>'
+                '</div>',
                 unsafe_allow_html=True,
             )
 
 
-# ==================================================
+# ============================================================
 # AI BATTLE ARENA
-# ==================================================
+# ============================================================
 
 elif page == "AI Battle Arena":
 
     hero(
         "FIELD TEST 02 · INTELLIGENT AGENTS",
         "AI Battle Arena",
-        "Pick a hidden species and let an intelligent strategy investigate it. "
-        "Reveal the AI's decisions one turn at a time.",
+        "Choose a hidden species and watch an intelligent strategy "
+        "investigate it, one decision at a time.",
     )
 
     roster = ["Gengar", "Piplup", "Mimikyu", "Sprigatito"]
@@ -778,7 +874,7 @@ elif page == "AI Battle Arena":
         with col:
             art_card(name, name, 112)
 
-    st.markdown("### ⚙️ Set up the battle")
+    st.markdown("## ⚙️ Set Up the Battle")
 
     left, right = st.columns(2)
 
@@ -792,7 +888,7 @@ elif page == "AI Battle Arena":
 
     with right:
         strategy = st.selectbox(
-            "AI strategy",
+            "AI Strategy",
             ["Random baseline", "Filter-based", "Entropy", "Minimax"],
             key="battle_strategy",
         )
@@ -802,7 +898,7 @@ elif page == "AI Battle Arena":
         "when switching strategies."
     )
 
-    if st.button("⚡ Prepare AI battle", use_container_width=True):
+    if st.button("⚡ Prepare AI Battle", use_container_width=True):
 
         solver = (
             EntropySolver(POKEMON) if strategy == "Entropy"
@@ -859,7 +955,7 @@ elif page == "AI Battle Arena":
         rows = battle["rows"]
         step = min(st.session_state.battle_step, len(rows))
 
-        st.markdown("### 🧠 Watch the AI reason")
+        st.markdown("## 🧠 Watch the AI Reason")
 
         top = st.columns(3)
 
@@ -880,9 +976,10 @@ elif page == "AI Battle Arena":
         if step == 0:
 
             st.markdown(
-                '<div class="panel"><h3>🔎 The AI has '
-                f'{len(POKEMON)} possible answers</h3>'
-                '<p>Reveal the first decision to see how the agent begins its search.</p></div>',
+                '<div class="panel">'
+                f'<h3>🔎 The AI has {len(POKEMON)} possible answers</h3>'
+                '<p>Reveal the first decision to see how the agent begins its search.</p>'
+                '</div>',
                 unsafe_allow_html=True,
             )
 
@@ -892,12 +989,12 @@ elif page == "AI Battle Arena":
 
             st.markdown(
                 f'<div class="turn-card">'
-                f'<span class="pill" style="background:#ffe3ef;color:#a34e77">'
+                f'<span class="pill" style="background:#FFE3EF;color:#A34E77">'
                 f'TURN {current["Turn"]}</span>'
                 f'<h3 style="margin:8px 0 2px">{html.escape(current["AI guess"])}</h3>'
-                f'<p style="margin:0;color:#81758e">Generation {current["Generation"]} · '
+                f'<p style="margin:0;color:#81758E">Generation {current["Generation"]} · '
                 f'{html.escape(current["Types"])}</p>'
-                f'<b style="color:#c16c96">{current["Candidates remaining"]} candidates remain</b>'
+                f'<b style="color:#C16C96">{current["Candidates remaining"]} candidates remain</b>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
@@ -914,7 +1011,7 @@ elif page == "AI Battle Arena":
 
         with prev_col:
             if st.button(
-                "← Previous turn",
+                "← Previous Turn",
                 disabled=step == 0,
                 use_container_width=True,
             ):
@@ -923,7 +1020,7 @@ elif page == "AI Battle Arena":
 
         with next_col:
             if st.button(
-                "Reveal next turn →",
+                "Reveal Next Turn →",
                 disabled=step >= len(rows),
                 use_container_width=True,
             ):
@@ -931,7 +1028,7 @@ elif page == "AI Battle Arena":
                 st.rerun()
 
         with reset_col:
-            if st.button("↺ Restart playback", use_container_width=True):
+            if st.button("↺ Restart Playback", use_container_width=True):
                 st.session_state.battle_step = 0
                 st.rerun()
 
@@ -941,10 +1038,12 @@ elif page == "AI Battle Arena":
 
             if battle["status"] == "won":
                 st.markdown(
-                    f'<div class="battle-result"><h3>🎉 Mystery solved!</h3>'
+                    f'<div class="battle-result">'
+                    f'<h3>🎉 Mystery Solved!</h3>'
                     f'<p>{html.escape(battle["strategy"])} identified '
                     f'<b>{html.escape(battle["secret"])}</b> in '
-                    f'<b>{len(rows)} guesses</b>.</p></div>',
+                    f'<b>{len(rows)} guesses</b>.</p>'
+                    f'</div>',
                     unsafe_allow_html=True,
                 )
             else:
@@ -954,7 +1053,7 @@ elif page == "AI Battle Arena":
 
             pokemon_art(battle["secret"], "The mystery revealed", 170)
 
-        with st.expander("View the complete battle log"):
+        with st.expander("View the Complete Battle Log"):
             st.dataframe(
                 pd.DataFrame(rows),
                 use_container_width=True,
@@ -979,7 +1078,7 @@ elif page == "AI Battle Arena":
         ax.set_xticks(range(len(counts)))
         ax.set_xlabel("After guess")
         ax.set_ylabel("Possible answers")
-        ax.set_title("Candidate search space")
+        ax.set_title("Candidate Search Space")
         ax.grid(alpha=0.2)
 
         fig.tight_layout()
@@ -993,16 +1092,18 @@ elif page == "AI Battle Arena":
     else:
 
         st.markdown(
-            '<div class="panel"><h3>✨ Your AI challenger is ready</h3>'
+            '<div class="panel">'
+            '<h3>✨ Your AI Challenger Is Ready</h3>'
             '<p>Choose a secret and strategy, prepare the battle, '
-            'then reveal each AI decision.</p></div>',
+            'then reveal each AI decision.</p>'
+            '</div>',
             unsafe_allow_html=True,
         )
 
 
-# ==================================================
+# ============================================================
 # PROFESSOR'S ANALYTICS
-# ==================================================
+# ============================================================
 
 elif page == "Professor’s Analytics":
 
@@ -1055,7 +1156,7 @@ elif page == "Professor’s Analytics":
                 runs = int(df["Runs"].sum()) if "Runs" in df.columns else "—"
                 metric("Total runs", runs, "As recorded in CSV")
 
-            st.markdown("### 🏅 Benchmark scoreboard")
+            st.markdown("## 🏅 Benchmark Scoreboard")
 
             st.dataframe(
                 df,
@@ -1063,14 +1164,14 @@ elif page == "Professor’s Analytics":
                 hide_index=True,
             )
 
-            st.markdown("### 📊 Compare strategy performance")
+            st.markdown("## 📊 Compare Strategy Performance")
 
             fig, ax = plt.subplots(figsize=(9, 3.8))
 
             bars = ax.bar(df["Solver"], df["Avg guesses"])
 
             ax.set_ylabel("Average guesses")
-            ax.set_title("Average guesses by strategy")
+            ax.set_title("Average Guesses by Strategy")
             ax.grid(axis="y", alpha=0.2)
 
             for bar, value in zip(bars, df["Avg guesses"]):
@@ -1088,7 +1189,7 @@ elif page == "Professor’s Analytics":
 
             if "Win rate" in df.columns:
 
-                st.markdown("### 🌷 Win rate")
+                st.markdown("## 🌷 Win Rate")
 
                 win_fig, win_ax = plt.subplots(figsize=(9, 3.0))
 
@@ -1101,7 +1202,7 @@ elif page == "Professor’s Analytics":
                 st.pyplot(win_fig)
                 plt.close(win_fig)
 
-            with st.expander("How the four strategies work"):
+            with st.expander("How the Four Strategies Work"):
 
                 st.markdown("""
                 - **Random baseline:** chooses an unguessed Pokémon without using clue information.
@@ -1111,7 +1212,7 @@ elif page == "Professor’s Analytics":
                 """)
 
             st.download_button(
-                "⬇ Download benchmark CSV",
+                "⬇ Download Benchmark CSV",
                 df.to_csv(index=False).encode(),
                 file_name="pokemon_wordle_benchmark.csv",
                 mime="text/csv",
@@ -1128,15 +1229,15 @@ elif page == "Professor’s Analytics":
         )
 
 
-# ==================================================
+# ============================================================
 # DATASET EXPLORER
-# ==================================================
+# ============================================================
 
 else:
 
     hero(
         "FIELD TEST 04 · DATA INVESTIGATION",
-        "The Pokédex collection",
+        "The Pokédex Collection",
         "Browse the actual dataset used by every solver. Search by name "
         "and filter species by generation and primary type.",
     )
@@ -1154,7 +1255,7 @@ else:
     with c3:
         metric("Generations", df.gen.nunique(), "Generation values")
 
-    st.markdown("### 🔎 Find a Pokémon")
+    st.markdown("## 🔎 Find a Pokémon")
 
     f1, f2, f3 = st.columns([1.5, 1, 1])
 
@@ -1195,7 +1296,7 @@ else:
 
     if not view.empty:
 
-        st.markdown("### 💗 Featured Pokédex entry")
+        st.markdown("## 💗 Featured Pokédex Entry")
 
         chosen = st.selectbox(
             "Choose a record to preview",
@@ -1212,30 +1313,37 @@ else:
 
         with detail_col:
             st.markdown(
-                f'<div class="panel"><h3>{html.escape(chosen)}</h3>'
+                f'<div class="panel">'
+                f'<h3>{html.escape(chosen)}</h3>'
                 f'<p><b>Generation:</b> {html.escape(str(record["gen"]))}</p>'
                 f'<p><b>Type 1:</b> {html.escape(str(record["type1"]))}</p>'
                 f'<p><b>Type 2:</b> {html.escape(str(record.get("type2") or "None"))}</p>'
                 f'<p><b>Height:</b> {html.escape(str(record.get("height", "—")))}</p>'
-                f'<p><b>Weight:</b> {html.escape(str(record.get("weight", "—")))}</p></div>',
+                f'<p><b>Weight:</b> {html.escape(str(record.get("weight", "—")))}</p>'
+                f'</div>',
                 unsafe_allow_html=True,
             )
 
     st.download_button(
-        "⬇ Export filtered dataset",
+        "⬇ Export Filtered Dataset",
         view.to_csv(index=False).encode(),
         file_name="pokemon_dataset_filtered.csv",
         mime="text/csv",
     )
 
 
-# ==================================================
+# ============================================================
 # FOOTER
-# ==================================================
+# ============================================================
 
 st.markdown("""
+<div class="nav-divider"></div>
 <div class="footer-text">
-    💗 POKÉMON WORDLE · GROUP RESEARCH PROJECT<br>
-    BUILT FOR INTELLIGENT EXPERIMENTATION ✦
+    ⚡ POKEMON WORDLE · RESEARCH LAB<br>
+    <span style="font-size:9px;letter-spacing:3px">
+        THINK · GUESS · DISCOVER · REPEAT
+    </span>
+    <br><br>
+    MADE WITH ♡ FOR POKÉMON RESEARCH
 </div>
 """, unsafe_allow_html=True)
