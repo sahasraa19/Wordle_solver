@@ -814,7 +814,7 @@ if page == "Welcome Hub":
         with col:
             art_card(name, name, 125)
 
-    st.markdown("## ✨ Research Lab Overview")
+    st.markdown("## Research Lab Overview 👩🏽‍🎤")
 
     stats = [
         ("Pokémon indexed", len(POKEMON), "Species in the dataset"),
@@ -829,7 +829,7 @@ if page == "Welcome Hub":
         with col:
             metric(*item)
 
-    st.markdown("## ⚡ Explore the Laboratory")
+    st.markdown("## Explore the Laboratory 🥼")
 
     cards = [
         ("🎮", "Pokédex Challenge", "Human vs Mystery",
@@ -856,7 +856,7 @@ if page == "Welcome Hub":
                 unsafe_allow_html=True,
             )
 
-    st.markdown("## ⚡ Trainer Statistics")
+    st.markdown("## Trainer Statistics 🏋🏽‍♂️")
 
     played = st.session_state.human_games_played
     won = st.session_state.human_games_won
@@ -917,7 +917,7 @@ elif page == "Pokédex Challenge":
 
     if game.status != "playing":
 
-        st.markdown("### ✨ Mystery Complete")
+        st.markdown("###  Mystery Complete 👍🏾")
 
         if game.status == "won":
             st.balloons()
@@ -930,7 +930,7 @@ elif page == "Pokédex Challenge":
             )
             pokemon_art(game.secret["name"], "The hidden Pokémon", 170)
 
-        if st.button("⚡ Start Another Mystery", use_container_width=True):
+        if st.button("Start Another Mystery 🥺", use_container_width=True):
             st.session_state.human_game = Game(POKEMON)
             st.rerun()
 
@@ -1117,7 +1117,7 @@ elif page == "AI Battle Arena":
         rows = battle["rows"]
         step = min(st.session_state.battle_step, len(rows))
 
-        st.markdown("## 🧠 Watch the AI Reason")
+        st.markdown("##  Watch the AI Reason 😼")
 
         top = st.columns(3)
 
@@ -1139,7 +1139,7 @@ elif page == "AI Battle Arena":
 
             st.markdown(
                 '<div class="panel">'
-                f'<h3>🔎 The AI has {len(POKEMON)} possible answers</h3>'
+                f'<h3> The AI has {len(POKEMON)} possible answers</h3>'
                 '<p>Reveal the first decision to see how the agent begins its search.</p>'
                 '</div>',
                 unsafe_allow_html=True,
@@ -1201,7 +1201,7 @@ elif page == "AI Battle Arena":
             if battle["status"] == "won":
                 st.markdown(
                     f'<div class="battle-result">'
-                    f'<h3>🎉 Mystery Solved!</h3>'
+                    f'<h3> Mystery Solved! 🤭</h3>'
                     f'<p>{html.escape(battle["strategy"])} identified '
                     f'<b>{html.escape(battle["secret"])}</b> in '
                     f'<b>{len(rows)} guesses</b>.</p>'
@@ -1255,7 +1255,7 @@ elif page == "AI Battle Arena":
 
         st.markdown(
             '<div class="panel">'
-            '<h3>✨ Your AI Challenger Is Ready</h3>'
+            '<h3> Your AI Challenger Is Ready 💪🏽</h3>'
             '<p>Choose a secret and strategy, prepare the battle, '
             'then reveal each AI decision.</p>'
             '</div>',
@@ -1458,7 +1458,7 @@ else:
 
     if not view.empty:
 
-        st.markdown("## ⚡ Featured Pokédex Entry")
+        st.markdown("##  Featured Pokédex Entry 🤫")
 
         chosen = st.selectbox(
             "Choose a record to preview",
