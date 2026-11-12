@@ -90,11 +90,24 @@ Refer to `requirements.txt` for the complete dependency list.
 pokemon_wordle/
 │
 ├── data/
-│   └── pokemon.csv
+│   ├── pokemon.csv
+│   ├── pokemon_full.csv
+│   └── pokemon_sample_backup.csv
 │
 ├── results/
 │   ├── results_table.csv
 │   └── benchmark_chart.png
+│
+├── notebooks/
+│   ├── main.ipynb
+│   ├── basic_solvers.ipynb
+│   ├── mem1.ipynb
+│   ├── mem3.ipynb
+│   └── mem4.ipynb
+│
+├── slides/
+│   ├── project_presentation.pdf
+│   └── project_presentation.pptx
 │
 ├── loader.py
 ├── engine.py
