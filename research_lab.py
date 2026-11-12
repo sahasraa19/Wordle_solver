@@ -68,7 +68,7 @@ def pokemon_url(name):
 
 
 # ============================================================
-# PREMIUM POKEMON INTERFACE
+# POKEMON BLUE & YELLOW INTERFACE
 # ============================================================
 
 st.markdown("""
@@ -76,36 +76,36 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
 
 :root {
-    --pink: #F5A9C7;
-    --pink-dark: #C65383;
-    --pink-light: #FFF0F6;
-    --lavender: #E9DFFF;
-    --lavender-dark: #8065AD;
-    --cream: #FFFAF5;
-    --plum: #38243F;
-    --muted: #66546F;
-    --line: #E8CDDD;
+    --blue: #1769AA;
+    --blue-dark: #142D4E;
+    --blue-light: #E7F2FF;
+    --yellow: #FFD83D;
+    --yellow-light: #FFF5C7;
+    --background: #F3F9FF;
+    --text: #183451;
+    --muted: #58728D;
+    --line: #C9DDF0;
 }
 
-/* GLOBAL TEXT CONTRAST */
+/* GLOBAL TEXT */
 
 html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif !important;
-    color: var(--plum) !important;
+    color: var(--text) !important;
 }
 
 body, p, li, label,
 .stMarkdown,
 [data-testid="stCaptionContainer"],
 [data-testid="stWidgetLabel"] {
-    color: #49344E !important;
+    color: #294967 !important;
 }
 
 .stApp {
     background:
-        radial-gradient(ellipse at 5% 5%, #FFE7F1 0%, transparent 34%),
-        radial-gradient(ellipse at 95% 15%, #EEE7FF 0%, transparent 32%),
-        #FFFAF7;
+        radial-gradient(ellipse at 5% 5%, #E1F0FF 0%, transparent 34%),
+        radial-gradient(ellipse at 95% 15%, #FFF4C8 0%, transparent 32%),
+        #F7FAFF;
 }
 
 .block-container {
@@ -115,7 +115,7 @@ body, p, li, label,
 }
 
 h1, h2, h3, h4 {
-    color: #38243F !important;
+    color: #142D4E !important;
     font-weight: 900 !important;
 }
 
@@ -124,7 +124,7 @@ h1, h2 {
 }
 
 p, label, li {
-    color: #49344E !important;
+    color: #294967 !important;
 }
 
 header[data-testid="stHeader"] {
@@ -155,12 +155,12 @@ header[data-testid="stHeader"] {
     width: 47px;
     height: 47px;
     border-radius: 50%;
-    background: linear-gradient(145deg, #FFF, #F5BDD5);
+    background: linear-gradient(145deg, #FFF5C7, #FFD83D);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 27px;
-    box-shadow: 0 4px 0 #E8A8C5, 0 8px 18px #D58BAF40;
+    box-shadow: 0 4px 0 #E5B92A, 0 8px 18px #D6A92740;
 }
 
 .brand-name {
@@ -168,13 +168,13 @@ header[data-testid="stHeader"] {
     font-size: 2.15rem;
     font-weight: 700;
     letter-spacing: 4px;
-    color: #563451 !important;
+    color: #142D4E !important;
     line-height: 1.1;
 }
 
 .brand-subtitle {
     text-align: center;
-    color: #795C79 !important;
+    color: #58728D !important;
     font-size: 10px;
     letter-spacing: 3px;
     font-weight: 900;
@@ -193,30 +193,34 @@ div[data-testid="stRadio"] > div {
 }
 
 div[data-testid="stRadio"] label {
-    background: rgba(255,255,255,.85);
-    border: 1px solid #E8CDDD;
+    background: rgba(255,255,255,.9);
+    border: 1px solid #C9DDF0;
     border-radius: 999px;
     padding: 8px 17px;
     transition: all .2s ease;
-    box-shadow: 0 3px 9px #9D74900C;
+    box-shadow: 0 3px 9px #315B850C;
 }
 
 div[data-testid="stRadio"] label:hover {
-    background: #FFF0F6;
-    border-color: #E8A8C5;
+    background: #FFF5C7;
+    border-color: #E5BD38;
     transform: translateY(-2px);
 }
 
 div[data-testid="stRadio"] label:has(input:checked) {
-    background: linear-gradient(135deg, #F6B8D1, #E8CFF5);
-    border: 1px solid #E7A8C7;
-    box-shadow: 0 4px 0 #DBA4C0, 0 7px 15px #D98BAE30;
+    background: linear-gradient(135deg, #1769AA, #3189C9);
+    border: 1px solid #1769AA;
+    box-shadow: 0 4px 0 #124F83, 0 7px 15px #1769AA30;
 }
 
 div[data-testid="stRadio"] label p {
-    color: #49344E !important;
+    color: #294967 !important;
     font-weight: 900 !important;
     font-size: .85rem;
+}
+
+div[data-testid="stRadio"] label:has(input:checked) p {
+    color: #FFFFFF !important;
 }
 
 div[data-testid="stRadio"] input {
@@ -227,7 +231,7 @@ div[data-testid="stRadio"] input {
 
 .nav-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, #EBCBD9, #DCCDF3, transparent);
+    background: linear-gradient(90deg, transparent, #A9CDEB, #F0D36B, transparent);
     margin: 12px 0 27px;
 }
 
@@ -238,22 +242,20 @@ div[data-testid="stRadio"] input {
     overflow: hidden;
     padding: 32px 35px;
     border-radius: 28px;
-    background: linear-gradient(115deg, #FFF0F6, #F1EBFF 68%, #FFF8FC);
-    border: 1px solid #F0DDE9;
-    box-shadow: 0 7px 0 #F2E1EB, 0 14px 30px #8E648519;
+    background: linear-gradient(115deg, #E7F2FF, #D8EBFF 68%, #FFF5C7);
+    border: 1px solid #C9DDF0;
+    box-shadow: 0 7px 0 #D7E7F6, 0 14px 30px #315B8519;
     margin-bottom: 24px;
 }
 
-/* CUTE HEART DECORATION */
-
 .lab-hero:after {
-    content: "♡";
+    content: "⚡";
     position: absolute;
     right: 42px;
     top: 4px;
-    color: #D96E9B;
+    color: #E5B92A;
     font-size: 88px;
-    opacity: .48;
+    opacity: .55;
     transform: rotate(12deg);
     pointer-events: none;
 }
@@ -262,17 +264,17 @@ div[data-testid="stRadio"] input {
     font-size: .72rem;
     letter-spacing: 3px;
     font-weight: 900;
-    color: #A64270 !important;
+    color: #1769AA !important;
 }
 
 .lab-hero h1 {
     font-size: 2.5rem;
     margin: 8px 0 5px;
-    color: #38243F !important;
+    color: #142D4E !important;
 }
 
 .lab-hero p {
-    color: #66546F !important;
+    color: #58728D !important;
     max-width: 780px;
     font-size: 1rem;
     margin-bottom: 0;
@@ -282,40 +284,40 @@ div[data-testid="stRadio"] input {
 /* PANELS */
 
 .panel {
-    background: linear-gradient(145deg, #FFFFFF, #FFF8FC);
-    border: 1px solid #F0E0EA;
+    background: linear-gradient(145deg, #FFFFFF, #F3F9FF);
+    border: 1px solid #D5E5F3;
     border-radius: 23px;
     padding: 21px;
-    box-shadow: 0 5px 0 #F4E6EE, 0 12px 24px #86618413;
+    box-shadow: 0 5px 0 #E0ECF7, 0 12px 24px #315B8513;
     height: 100%;
 }
 
 .panel h3 {
     margin-top: 0;
-    color: #38243F !important;
+    color: #142D4E !important;
 }
 
 .panel p {
-    color: #66546F !important;
+    color: #58728D !important;
 }
 
 .art-panel {
-    background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, #FFF0F6 68%, #EEE8FF 100%);
-    border: 1px solid #F0DFEB;
+    background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, #E7F2FF 68%, #FFF5C7 100%);
+    border: 1px solid #D5E5F3;
     border-radius: 25px;
     padding: 12px;
-    box-shadow: 0 5px 0 #F0E0EA, 0 12px 24px #8C64851B;
+    box-shadow: 0 5px 0 #E0ECF7, 0 12px 24px #315B851B;
     text-align: center;
 }
 
 /* METRICS */
 
 .metric {
-    background: linear-gradient(145deg, #FFFFFF, #FFF4F9);
-    border: 1px solid #F1E0EA;
+    background: linear-gradient(145deg, #FFFFFF, #F0F7FF);
+    border: 1px solid #D5E5F3;
     border-radius: 20px;
     padding: 17px;
-    box-shadow: 0 4px 0 #F2E4EC, 0 9px 18px #9B739515;
+    box-shadow: 0 4px 0 #E0ECF7, 0 9px 18px #315B8515;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -323,19 +325,19 @@ div[data-testid="stRadio"] input {
 }
 
 .metric small {
-    color: #66546F !important;
+    color: #58728D !important;
     font-weight: 900;
 }
 
 .metric b {
-    color: #B94E80 !important;
+    color: #1769AA !important;
     font-size: 1.65rem;
     font-weight: 900;
     overflow-wrap: anywhere;
 }
 
 .metric span {
-    color: #66546F !important;
+    color: #58728D !important;
     font-size: .8rem;
 }
 
@@ -353,19 +355,22 @@ div[data-testid="stRadio"] input {
 /* BUTTONS */
 
 .stButton > button {
-    background: linear-gradient(135deg, #F3A9C7, #DB82AC);
-    color: #38243F !important;
-    border: 1px solid #E4A0BD;
+    background: linear-gradient(135deg, #1769AA, #3189C9);
+    color: #FFFFFF !important;
+    border: 1px solid #1769AA;
     border-radius: 15px;
     padding: .65rem 1rem;
     font-weight: 900;
-    box-shadow: 0 4px 0 #C96F98, 0 8px 16px #D98BAE30;
+    box-shadow: 0 4px 0 #124F83, 0 8px 16px #1769AA30;
     transition: all .2s ease;
 }
 
 .stButton > button:hover {
+    background: linear-gradient(135deg, #FFD83D, #FFE77A);
+    color: #142D4E !important;
+    border-color: #E5BD38;
     transform: translateY(-2px);
-    box-shadow: 0 6px 0 #C96F98, 0 11px 19px #D98BAE40;
+    box-shadow: 0 6px 0 #D5AD2D, 0 11px 19px #D6A92740;
 }
 
 .stButton > button:disabled {
@@ -373,147 +378,136 @@ div[data-testid="stRadio"] input {
 }
 
 .stDownloadButton > button {
-    background: linear-gradient(135deg, #EDE5FF, #F5EFFF);
-    color: #49344E !important;
-    border: 1px solid #DCD0F4;
+    background: linear-gradient(135deg, #FFF5C7, #FFE78A);
+    color: #142D4E !important;
+    border: 1px solid #E5BD38;
     border-radius: 13px;
     font-weight: 900;
 }
 
-/* ============================================================
-   COMPLETE STREAMLIT INPUT & DROPDOWN CONTRAST FIX
-   ============================================================ */
+/* INPUTS AND DROPDOWNS */
 
-/* Selectbox outer container */
 div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
 div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div {
-    background-color: #FFF7FB !important;
-    border: 1.5px solid #D9B4CB !important;
+    background-color: #F3F9FF !important;
+    border: 1.5px solid #A9CDEB !important;
     border-radius: 13px !important;
     box-shadow: none !important;
 }
 
-/* Selected value and all text inside closed dropdown */
 div[data-testid="stSelectbox"] div[data-baseweb="select"],
 div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
 div[data-testid="stMultiSelect"] div[data-baseweb="select"],
 div[data-testid="stMultiSelect"] div[data-baseweb="select"] * {
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
     opacity: 1 !important;
 }
 
-/* Search input inside searchable dropdowns */
 div[data-baseweb="select"] input {
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
-    caret-color: #38243F !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
+    caret-color: #142D4E !important;
     background-color: transparent !important;
 }
 
-/* Placeholder */
 div[data-baseweb="select"] input::placeholder {
-    color: #806A80 !important;
-    -webkit-text-fill-color: #806A80 !important;
+    color: #58728D !important;
+    -webkit-text-fill-color: #58728D !important;
     opacity: 1 !important;
 }
 
-/* Dropdown menu and popover */
 div[data-baseweb="popover"],
 div[data-baseweb="popover"] > div,
 div[data-baseweb="menu"],
 ul[role="listbox"] {
-    background-color: #FFF7FB !important;
-    border: 1px solid #E8CDDD !important;
+    background-color: #F3F9FF !important;
+    border: 1px solid #C9DDF0 !important;
     border-radius: 12px !important;
 }
 
-/* Dropdown option text */
 div[data-baseweb="popover"] li,
 div[data-baseweb="popover"] li *,
 div[data-baseweb="popover"] [role="option"],
 div[data-baseweb="popover"] [role="option"] *,
 ul[role="listbox"] li,
 ul[role="listbox"] li * {
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
     opacity: 1 !important;
     font-weight: 700 !important;
 }
 
-/* Option background */
 div[data-baseweb="popover"] li,
 div[data-baseweb="popover"] [role="option"],
 ul[role="listbox"] li {
-    background-color: #FFF7FB !important;
+    background-color: #F3F9FF !important;
 }
 
-/* Hovered option */
 div[data-baseweb="popover"] li:hover,
 div[data-baseweb="popover"] [role="option"]:hover,
 ul[role="listbox"] li:hover {
-    background-color: #E9DFFF !important;
+    background-color: #FFF0A8 !important;
 }
 
-/* Keyboard-focused and selected options */
 div[data-baseweb="popover"] [aria-selected="true"],
 div[data-baseweb="popover"] [aria-selected="true"] *,
 div[data-baseweb="popover"] [data-highlighted="true"],
 div[data-baseweb="popover"] [data-highlighted="true"] * {
-    background-color: #F5D9E8 !important;
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
+    background-color: #FFF0A8 !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
 }
 
-/* Dropdown arrow and icons */
 div[data-baseweb="select"] svg {
-    fill: #38243F !important;
-    color: #38243F !important;
+    fill: #1769AA !important;
+    color: #1769AA !important;
 }
 
-/* Focused dropdown */
 div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
 div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within {
-    border: 2px solid #C65383 !important;
-    box-shadow: 0 0 0 3px rgba(198, 83, 131, 0.15) !important;
+    border: 2px solid #1769AA !important;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.15) !important;
 }
 
-/* Text inputs */
+/* TEXT INPUTS */
+
 div[data-testid="stTextInput"] input,
 div[data-baseweb="input"] input,
 div[data-baseweb="textarea"] textarea,
 .stTextInput input,
 .stTextArea textarea {
-    background-color: #FFF7FB !important;
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
-    caret-color: #38243F !important;
-    border-color: #D9B4CB !important;
+    background-color: #F3F9FF !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
+    caret-color: #142D4E !important;
+    border-color: #A9CDEB !important;
     border-radius: 12px !important;
 }
 
-/* Text input placeholders */
 div[data-testid="stTextInput"] input::placeholder,
 div[data-baseweb="input"] input::placeholder,
 textarea::placeholder {
-    color: #806A80 !important;
-    -webkit-text-fill-color: #806A80 !important;
+    color: #58728D !important;
+    -webkit-text-fill-color: #58728D !important;
     opacity: 1 !important;
 }
 
-/* Multiselect selected tags */
+/* MULTISELECT TAGS */
+
 span[data-baseweb="tag"] {
-    background-color: #F5D9E8 !important;
-    color: #38243F !important;
+    background-color: #FFF0A8 !important;
+    color: #142D4E !important;
 }
 
 span[data-baseweb="tag"] *,
 span[data-baseweb="tag"] div {
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
 }
 
-/* Widget labels */
+/* WIDGET LABELS */
+
 .stSelectbox label,
 .stMultiSelect label,
 .stTextInput label,
@@ -522,8 +516,8 @@ span[data-baseweb="tag"] div {
 .stNumberInput label,
 [data-testid="stWidgetLabel"],
 [data-testid="stWidgetLabel"] p {
-    color: #38243F !important;
-    -webkit-text-fill-color: #38243F !important;
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
     font-weight: 900 !important;
 }
 
@@ -531,14 +525,14 @@ span[data-baseweb="tag"] div {
 
 div[data-testid="stTextInput"] input:focus,
 div[data-baseweb="input"] input:focus {
-    border-color: #C65383 !important;
-    box-shadow: 0 0 0 3px rgba(198, 83, 131, 0.15) !important;
+    border-color: #1769AA !important;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, 0.15) !important;
 }
 
 /* DATAFRAMES */
 
 div[data-testid="stDataFrame"] {
-    border: 1px solid #F0DFEB;
+    border: 1px solid #D5E5F3;
     border-radius: 16px;
     overflow: hidden;
 }
@@ -547,14 +541,14 @@ div[data-testid="stDataFrame"] {
 
 div[data-testid="stMetric"] {
     background: white;
-    border: 1px solid #F0DFEB;
+    border: 1px solid #D5E5F3;
     padding: 15px;
     border-radius: 18px;
-    box-shadow: 0 5px 16px #3330440A;
+    box-shadow: 0 5px 16px #315B850A;
 }
 
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    color: #B94E80 !important;
+    color: #1769AA !important;
     font-weight: 900 !important;
 }
 
@@ -562,46 +556,46 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
 
 [data-testid="stExpander"] {
     background: #FFFFFF;
-    border: 1px solid #F0DFEB;
+    border: 1px solid #D5E5F3;
     border-radius: 16px;
 }
 
 [data-testid="stExpander"] summary,
 [data-testid="stExpander"] summary p {
-    color: #49344E !important;
+    color: #294967 !important;
 }
 
 /* GAME COMPONENTS */
 
 .turn-card {
-    background: linear-gradient(120deg, #FFFFFF, #FFF4F9);
-    border: 1px solid #F0DFEB;
+    background: linear-gradient(120deg, #FFFFFF, #F0F7FF);
+    border: 1px solid #D5E5F3;
     border-radius: 19px;
     padding: 16px;
     margin: 9px 0;
-    box-shadow: 0 4px 12px #8C648510;
+    box-shadow: 0 4px 12px #315B8510;
 }
 
 .turn-card h3 {
-    color: #38243F !important;
+    color: #142D4E !important;
 }
 
 .battle-result {
-    background: linear-gradient(120deg, #FFF0F6, #F0EBFF);
-    border: 1px solid #EED9E8;
+    background: linear-gradient(120deg, #E7F2FF, #FFF5C7);
+    border: 1px solid #C9DDF0;
     border-radius: 23px;
     padding: 23px;
-    box-shadow: 0 8px 20px #9B73951A;
+    box-shadow: 0 8px 20px #315B851A;
 }
 
 .battle-result h3,
 .battle-result p {
-    color: #38243F !important;
+    color: #142D4E !important;
 }
 
 .footer-text {
     text-align: center;
-    color: #66546F !important;
+    color: #58728D !important;
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 2px;
@@ -609,7 +603,7 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
 }
 
 .stProgress > div > div > div > div {
-    background: linear-gradient(90deg, #F3A9C7, #BBA6E9);
+    background: linear-gradient(90deg, #1769AA, #FFD83D);
 }
 
 .stAlert {
@@ -617,11 +611,11 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
 }
 
 .stAlert p {
-    color: #49344E !important;
+    color: #294967 !important;
 }
 
 hr {
-    border-color: #F0E1EB;
+    border-color: #D5E5F3;
 }
 
 @media (max-width: 700px) {
@@ -700,8 +694,8 @@ def pokemon_art(name, caption=None, width=190):
         st.image(url, caption=caption, width=width)
     else:
         st.markdown(
-            f'<div style="padding:25px;text-align:center;color:#66546F">'
-            f'<div style="font-size:38px">♡</div>'
+            f'<div style="padding:25px;text-align:center;color:#58728D">'
+            f'<div style="font-size:38px">⚡</div>'
             f'<b>{html.escape(name)}</b></div>',
             unsafe_allow_html=True,
         )
@@ -806,7 +800,7 @@ page = page_map[selected_page]
 if page == "Welcome Hub":
 
     hero(
-        "♡ WELCOME, TRAINER ♡",
+        "⚡ WELCOME, TRAINER ⚡",
         "Welcome to the Pokémon World!",
         "A world of mystery, intelligent guessing and Pokémon discovery. "
         "Explore the Pokédex, challenge yourself and watch AI strategies compete.",
@@ -835,7 +829,7 @@ if page == "Welcome Hub":
         with col:
             metric(*item)
 
-    st.markdown("## 🌸 Explore the Laboratory")
+    st.markdown("## ⚡ Explore the Laboratory")
 
     cards = [
         ("🎮", "Pokédex Challenge", "Human vs Mystery",
@@ -856,13 +850,13 @@ if page == "Welcome Hub":
                 f'<div class="panel">'
                 f'<div style="font-size:29px">{emoji}</div>'
                 f'<h3>{html.escape(title)}</h3>'
-                f'<b style="color:#A64270">{html.escape(tagline)}</b>'
+                f'<b style="color:#1769AA">{html.escape(tagline)}</b>'
                 f'<p>{html.escape(desc)}</p>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
 
-    st.markdown("## 💗 Trainer Statistics")
+    st.markdown("## ⚡ Trainer Statistics")
 
     played = st.session_state.human_games_played
     won = st.session_state.human_games_won
@@ -904,11 +898,11 @@ elif page == "Pokédex Challenge":
     with left:
         st.markdown("""
         <div class="panel">
-            <h3>🌸 Welcome to the Mystery Meadow</h3>
+            <h3>⚡ Welcome to the Mystery Meadow</h3>
             <p>Every guess reveals five pieces of feedback. Green means a match;
             directional clues help you understand numeric attributes.</p>
-            <span class="pill" style="background:#FFE3EF;color:#A34E77">5 clue dimensions</span>
-            <span class="pill" style="background:#EEE8FF;color:#68538F">8 guesses max</span>
+            <span class="pill" style="background:#FFF0A8;color:#8A6500">5 clue dimensions</span>
+            <span class="pill" style="background:#E7F2FF;color:#1769AA">8 guesses max</span>
             <span class="pill" style="background:#E4F5ED;color:#39775B">386 species</span>
         </div>
         """, unsafe_allow_html=True)
@@ -936,7 +930,7 @@ elif page == "Pokédex Challenge":
             )
             pokemon_art(game.secret["name"], "The hidden Pokémon", 170)
 
-        if st.button("🌷 Start Another Mystery", use_container_width=True):
+        if st.button("⚡ Start Another Mystery", use_container_width=True):
             st.session_state.human_game = Game(POKEMON)
             st.rerun()
 
@@ -993,7 +987,7 @@ elif page == "Pokédex Challenge":
         ]
 
         if st.button(
-            "💗 Submit My Guess",
+            "⚡ Submit My Guess",
             use_container_width=True,
             disabled=already_guessed,
         ):
@@ -1157,12 +1151,12 @@ elif page == "AI Battle Arena":
 
             st.markdown(
                 f'<div class="turn-card">'
-                f'<span class="pill" style="background:#FFE3EF;color:#A34E77">'
+                f'<span class="pill" style="background:#FFF0A8;color:#8A6500">'
                 f'TURN {current["Turn"]}</span>'
                 f'<h3 style="margin:8px 0 2px">{html.escape(current["AI guess"])}</h3>'
-                f'<p style="margin:0;color:#66546F">Generation {current["Generation"]} · '
+                f'<p style="margin:0;color:#58728D">Generation {current["Generation"]} · '
                 f'{html.escape(current["Types"])}</p>'
-                f'<b style="color:#A64270">{current["Candidates remaining"]} candidates remain</b>'
+                f'<b style="color:#1769AA">{current["Candidates remaining"]} candidates remain</b>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
@@ -1357,7 +1351,7 @@ elif page == "Professor’s Analytics":
 
             if "Win rate" in df.columns:
 
-                st.markdown("## 🌷 Win Rate")
+                st.markdown("## ⚡ Win Rate")
 
                 win_fig, win_ax = plt.subplots(figsize=(9, 3.0))
 
@@ -1464,7 +1458,7 @@ else:
 
     if not view.empty:
 
-        st.markdown("## 💗 Featured Pokédex Entry")
+        st.markdown("## ⚡ Featured Pokédex Entry")
 
         chosen = st.selectbox(
             "Choose a record to preview",
@@ -1512,6 +1506,6 @@ st.markdown("""
         THINK · GUESS · DISCOVER · REPEAT
     </span>
     <br><br>
-    MADE WITH ♡ FOR POKÉMON RESEARCH
+    MADE WITH ⚡ FOR POKÉMON RESEARCH
 </div>
 """, unsafe_allow_html=True)
