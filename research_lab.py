@@ -380,28 +380,159 @@ div[data-testid="stRadio"] input {
     font-weight: 900;
 }
 
-/* INPUTS */
+/* ============================================================
+   COMPLETE STREAMLIT INPUT & DROPDOWN CONTRAST FIX
+   ============================================================ */
 
-div[data-testid="stSelectbox"] > div > div,
-div[data-testid="stTextInput"] input {
-    background: white;
-    border-radius: 13px;
-    border-color: #EBD8E5;
+/* Selectbox outer container */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div {
+    background-color: #FFF7FB !important;
+    border: 1.5px solid #D9B4CB !important;
+    border-radius: 13px !important;
+    box-shadow: none !important;
+}
+
+/* Selected value and all text inside closed dropdown */
+div[data-testid="stSelectbox"] div[data-baseweb="select"],
+div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"],
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] * {
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+    opacity: 1 !important;
+}
+
+/* Search input inside searchable dropdowns */
+div[data-baseweb="select"] input {
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+    caret-color: #38243F !important;
+    background-color: transparent !important;
+}
+
+/* Placeholder */
+div[data-baseweb="select"] input::placeholder {
+    color: #806A80 !important;
+    -webkit-text-fill-color: #806A80 !important;
+    opacity: 1 !important;
+}
+
+/* Dropdown menu and popover */
+div[data-baseweb="popover"],
+div[data-baseweb="popover"] > div,
+div[data-baseweb="menu"],
+ul[role="listbox"] {
+    background-color: #FFF7FB !important;
+    border: 1px solid #E8CDDD !important;
+    border-radius: 12px !important;
+}
+
+/* Dropdown option text */
+div[data-baseweb="popover"] li,
+div[data-baseweb="popover"] li *,
+div[data-baseweb="popover"] [role="option"],
+div[data-baseweb="popover"] [role="option"] *,
+ul[role="listbox"] li,
+ul[role="listbox"] li * {
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+}
+
+/* Option background */
+div[data-baseweb="popover"] li,
+div[data-baseweb="popover"] [role="option"],
+ul[role="listbox"] li {
+    background-color: #FFF7FB !important;
+}
+
+/* Hovered option */
+div[data-baseweb="popover"] li:hover,
+div[data-baseweb="popover"] [role="option"]:hover,
+ul[role="listbox"] li:hover {
+    background-color: #E9DFFF !important;
+}
+
+/* Keyboard-focused and selected options */
+div[data-baseweb="popover"] [aria-selected="true"],
+div[data-baseweb="popover"] [aria-selected="true"] *,
+div[data-baseweb="popover"] [data-highlighted="true"],
+div[data-baseweb="popover"] [data-highlighted="true"] * {
+    background-color: #F5D9E8 !important;
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+}
+
+/* Dropdown arrow and icons */
+div[data-baseweb="select"] svg {
+    fill: #38243F !important;
     color: #38243F !important;
 }
 
-div[data-testid="stSelectbox"] > div > div:focus-within,
-div[data-testid="stTextInput"] input:focus {
-    border-color: #D88DB1;
-    box-shadow: 0 0 0 2px #F8DCE8;
+/* Focused dropdown */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within {
+    border: 2px solid #C65383 !important;
+    box-shadow: 0 0 0 3px rgba(198, 83, 131, 0.15) !important;
 }
 
+/* Text inputs */
+div[data-testid="stTextInput"] input,
+div[data-baseweb="input"] input,
+div[data-baseweb="textarea"] textarea,
+.stTextInput input,
+.stTextArea textarea {
+    background-color: #FFF7FB !important;
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+    caret-color: #38243F !important;
+    border-color: #D9B4CB !important;
+    border-radius: 12px !important;
+}
+
+/* Text input placeholders */
+div[data-testid="stTextInput"] input::placeholder,
+div[data-baseweb="input"] input::placeholder,
+textarea::placeholder {
+    color: #806A80 !important;
+    -webkit-text-fill-color: #806A80 !important;
+    opacity: 1 !important;
+}
+
+/* Multiselect selected tags */
+span[data-baseweb="tag"] {
+    background-color: #F5D9E8 !important;
+    color: #38243F !important;
+}
+
+span[data-baseweb="tag"] *,
+span[data-baseweb="tag"] div {
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+}
+
+/* Widget labels */
 .stSelectbox label,
+.stMultiSelect label,
 .stTextInput label,
+.stTextArea label,
 .stRadio label,
-[data-testid="stWidgetLabel"] {
-    color: #49344E !important;
-    font-weight: 800 !important;
+.stNumberInput label,
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] p {
+    color: #38243F !important;
+    -webkit-text-fill-color: #38243F !important;
+    font-weight: 900 !important;
+}
+
+/* INPUT FOCUS */
+
+div[data-testid="stTextInput"] input:focus,
+div[data-baseweb="input"] input:focus {
+    border-color: #C65383 !important;
+    box-shadow: 0 0 0 3px rgba(198, 83, 131, 0.15) !important;
 }
 
 /* DATAFRAMES */
@@ -637,8 +768,6 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-# Removed Professor Oak's Intelligence Laboratory subtitle.
 
 st.markdown("<br>", unsafe_allow_html=True)
 
