@@ -77,19 +77,28 @@ st.markdown("""
 
 :root {
     --pink: #F5A9C7;
-    --pink-dark: #D96E9B;
+    --pink-dark: #C65383;
     --pink-light: #FFF0F6;
     --lavender: #E9DFFF;
-    --lavender-dark: #BDA9E8;
+    --lavender-dark: #8065AD;
     --cream: #FFFAF5;
-    --plum: #49344E;
-    --muted: #927F98;
-    --line: #F0DCE8;
+    --plum: #38243F;
+    --muted: #66546F;
+    --line: #E8CDDD;
 }
+
+/* GLOBAL TEXT CONTRAST */
 
 html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif !important;
-    color: var(--plum);
+    color: var(--plum) !important;
+}
+
+body, p, li, label,
+.stMarkdown,
+[data-testid="stCaptionContainer"],
+[data-testid="stWidgetLabel"] {
+    color: #49344E !important;
 }
 
 .stApp {
@@ -106,7 +115,7 @@ html, body, [class*="css"] {
 }
 
 h1, h2, h3, h4 {
-    color: var(--plum) !important;
+    color: #38243F !important;
     font-weight: 900 !important;
 }
 
@@ -115,7 +124,7 @@ h1, h2 {
 }
 
 p, label, li {
-    color: var(--plum);
+    color: #49344E !important;
 }
 
 header[data-testid="stHeader"] {
@@ -159,13 +168,13 @@ header[data-testid="stHeader"] {
     font-size: 2.15rem;
     font-weight: 700;
     letter-spacing: 4px;
-    color: #65415F;
+    color: #563451 !important;
     line-height: 1.1;
 }
 
 .brand-subtitle {
     text-align: center;
-    color: #A1819B;
+    color: #795C79 !important;
     font-size: 10px;
     letter-spacing: 3px;
     font-weight: 900;
@@ -184,8 +193,8 @@ div[data-testid="stRadio"] > div {
 }
 
 div[data-testid="stRadio"] label {
-    background: rgba(255,255,255,.72);
-    border: 1px solid #F0DDE8;
+    background: rgba(255,255,255,.85);
+    border: 1px solid #E8CDDD;
     border-radius: 999px;
     padding: 8px 17px;
     transition: all .2s ease;
@@ -205,7 +214,7 @@ div[data-testid="stRadio"] label:has(input:checked) {
 }
 
 div[data-testid="stRadio"] label p {
-    color: #63465F !important;
+    color: #49344E !important;
     font-weight: 900 !important;
     font-size: .85rem;
 }
@@ -235,30 +244,35 @@ div[data-testid="stRadio"] input {
     margin-bottom: 24px;
 }
 
+/* CUTE HEART DECORATION */
+
 .lab-hero:after {
-    content: "✦";
+    content: "♡";
     position: absolute;
     right: 42px;
-    top: 0;
-    color: #DDB3D1;
-    font-size: 100px;
-    opacity: .5;
+    top: 4px;
+    color: #D96E9B;
+    font-size: 88px;
+    opacity: .48;
+    transform: rotate(12deg);
+    pointer-events: none;
 }
 
 .lab-hero .eyebrow {
     font-size: .72rem;
     letter-spacing: 3px;
     font-weight: 900;
-    color: #C06C98;
+    color: #A64270 !important;
 }
 
 .lab-hero h1 {
     font-size: 2.5rem;
     margin: 8px 0 5px;
+    color: #38243F !important;
 }
 
 .lab-hero p {
-    color: #84758E;
+    color: #66546F !important;
     max-width: 780px;
     font-size: 1rem;
     margin-bottom: 0;
@@ -278,6 +292,11 @@ div[data-testid="stRadio"] input {
 
 .panel h3 {
     margin-top: 0;
+    color: #38243F !important;
+}
+
+.panel p {
+    color: #66546F !important;
 }
 
 .art-panel {
@@ -304,19 +323,19 @@ div[data-testid="stRadio"] input {
 }
 
 .metric small {
-    color: #95849B;
+    color: #66546F !important;
     font-weight: 900;
 }
 
 .metric b {
-    color: #CD719B;
+    color: #B94E80 !important;
     font-size: 1.65rem;
     font-weight: 900;
     overflow-wrap: anywhere;
 }
 
 .metric span {
-    color: #93869D;
+    color: #66546F !important;
     font-size: .8rem;
 }
 
@@ -335,7 +354,7 @@ div[data-testid="stRadio"] input {
 
 .stButton > button {
     background: linear-gradient(135deg, #F3A9C7, #DB82AC);
-    color: white !important;
+    color: #38243F !important;
     border: 1px solid #E4A0BD;
     border-radius: 15px;
     padding: .65rem 1rem;
@@ -355,7 +374,7 @@ div[data-testid="stRadio"] input {
 
 .stDownloadButton > button {
     background: linear-gradient(135deg, #EDE5FF, #F5EFFF);
-    color: #604C7E !important;
+    color: #49344E !important;
     border: 1px solid #DCD0F4;
     border-radius: 13px;
     font-weight: 900;
@@ -368,13 +387,21 @@ div[data-testid="stTextInput"] input {
     background: white;
     border-radius: 13px;
     border-color: #EBD8E5;
-    color: var(--plum);
+    color: #38243F !important;
 }
 
 div[data-testid="stSelectbox"] > div > div:focus-within,
 div[data-testid="stTextInput"] input:focus {
     border-color: #D88DB1;
     box-shadow: 0 0 0 2px #F8DCE8;
+}
+
+.stSelectbox label,
+.stTextInput label,
+.stRadio label,
+[data-testid="stWidgetLabel"] {
+    color: #49344E !important;
+    font-weight: 800 !important;
 }
 
 /* DATAFRAMES */
@@ -396,7 +423,7 @@ div[data-testid="stMetric"] {
 }
 
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    color: #CF719B !important;
+    color: #B94E80 !important;
     font-weight: 900 !important;
 }
 
@@ -406,6 +433,11 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     background: #FFFFFF;
     border: 1px solid #F0DFEB;
     border-radius: 16px;
+}
+
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] summary p {
+    color: #49344E !important;
 }
 
 /* GAME COMPONENTS */
@@ -419,6 +451,10 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     box-shadow: 0 4px 12px #8C648510;
 }
 
+.turn-card h3 {
+    color: #38243F !important;
+}
+
 .battle-result {
     background: linear-gradient(120deg, #FFF0F6, #F0EBFF);
     border: 1px solid #EED9E8;
@@ -427,9 +463,14 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     box-shadow: 0 8px 20px #9B73951A;
 }
 
+.battle-result h3,
+.battle-result p {
+    color: #38243F !important;
+}
+
 .footer-text {
     text-align: center;
-    color: #A18CA3;
+    color: #66546F !important;
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 2px;
@@ -442,6 +483,10 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
 
 .stAlert {
     border-radius: 16px;
+}
+
+.stAlert p {
+    color: #49344E !important;
 }
 
 hr {
@@ -524,8 +569,8 @@ def pokemon_art(name, caption=None, width=190):
         st.image(url, caption=caption, width=width)
     else:
         st.markdown(
-            f'<div style="padding:25px;text-align:center;color:#9B7893">'
-            f'<div style="font-size:38px">✦</div>'
+            f'<div style="padding:25px;text-align:center;color:#66546F">'
+            f'<div style="font-size:38px">♡</div>'
             f'<b>{html.escape(name)}</b></div>',
             unsafe_allow_html=True,
         )
@@ -593,13 +638,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown(
-    '<div style="text-align:center;color:#A78BA5;'
-    'font-size:11px;letter-spacing:2px;font-weight:900">'
-    '✦ PROFESSOR OAK’S INTELLIGENCE LABORATORY ✦'
-    '</div>',
-    unsafe_allow_html=True,
-)
+# Removed Professor Oak's Intelligence Laboratory subtitle.
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -638,7 +677,7 @@ page = page_map[selected_page]
 if page == "Welcome Hub":
 
     hero(
-        "✦ WELCOME, TRAINER ✦",
+        "♡ WELCOME, TRAINER ♡",
         "Welcome to the Pokémon World!",
         "A world of mystery, intelligent guessing and Pokémon discovery. "
         "Explore the Pokédex, challenge yourself and watch AI strategies compete.",
@@ -688,7 +727,7 @@ if page == "Welcome Hub":
                 f'<div class="panel">'
                 f'<div style="font-size:29px">{emoji}</div>'
                 f'<h3>{html.escape(title)}</h3>'
-                f'<b style="color:#C16C96">{html.escape(tagline)}</b>'
+                f'<b style="color:#A64270">{html.escape(tagline)}</b>'
                 f'<p>{html.escape(desc)}</p>'
                 f'</div>',
                 unsafe_allow_html=True,
@@ -992,9 +1031,9 @@ elif page == "AI Battle Arena":
                 f'<span class="pill" style="background:#FFE3EF;color:#A34E77">'
                 f'TURN {current["Turn"]}</span>'
                 f'<h3 style="margin:8px 0 2px">{html.escape(current["AI guess"])}</h3>'
-                f'<p style="margin:0;color:#81758E">Generation {current["Generation"]} · '
+                f'<p style="margin:0;color:#66546F">Generation {current["Generation"]} · '
                 f'{html.escape(current["Types"])}</p>'
-                f'<b style="color:#C16C96">{current["Candidates remaining"]} candidates remain</b>'
+                f'<b style="color:#A64270">{current["Candidates remaining"]} candidates remain</b>'
                 f'</div>',
                 unsafe_allow_html=True,
             )
