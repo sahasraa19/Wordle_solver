@@ -1,131 +1,185 @@
 
-"""Benchmark all solvers under the actual 8-guess game rules."""
+"""Benchmark all four Pokémon Wordle strategies under actual game rules."""
 
 import os
 import time
+import random
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from engine import MAX_GUESSES, FAIL_SCORE, play_game
 from loader import load_pokemon
-from basic_solvers import random_solver, filter_solver
+from basic_solvers import random_solver, filter_solver, filter_candidates
 from entropy_solver import EntropySolver
 from minimax_solver import MinimaxSolver
+
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(ROOT, "results")
 
 
 def run_all(repeats=5, seed=0, save=True, show=True):
+
     os.makedirs(RESULTS_DIR, exist_ok=True)
 
-    pokemon = load_pokemon()
-    rng = np.random.default_rng(seed)
+    random.seed(seed)
+    np.random.seed(seed)
 
+    pokemon = load_pokemon()
+    n = len(pokemon)
+
+    # Initialize advanced solvers once.
     entropy = EntropySolver(pokemon=pokemon)
     minimax = MinimaxSolver(pokemon=pokemon)
 
-    def random_fn(pokemon, history):
-        guessed = {g["name"] for g, _ in history}
-        remaining = [p for p in pokemon if p["name"] not in guessed]
-        return remaining[int(rng.integers(len(remaining)))]
+    # All solvers follow the same interface:
+    # solver(pokemon, history) -> Pokemon record
+
+    def entropy_solver(pokemon, history):
+        candidates = filter_candidates(pokemon, history)
+        guessed = [guess for guess, clue in history]
+        return entropy.next_guess(candidates, guessed)
+
+    def minimax_solver(pokemon, history):
+        candidates = filter_candidates(pokemon, history)
+        guessed = [guess for guess, clue in history]
+        return minimax.next_guess(candidates, guessed)
 
     solvers = {
-        "Random": (random_fn, repeats),
+        "Random": (random_solver, repeats),
         "Filter": (filter_solver, repeats),
-        "Entropy": (
-            lambda p, h: entropy.next_guess(
-                [x for x in p if x["name"] not in {g["name"] for g, _ in h}]
-                if not h else entropy_candidates(p, h),
-                [g for g, _ in h]
-            ),
-            1
-        ),
-        "Minimax": (
-            lambda p, h: minimax.next_guess(
-                [x for x in p if x["name"] not in {g["name"] for g, _ in h}]
-                if not h else minimax_candidates(p, h),
-                [g for g, _ in h]
-            ),
-            1
-        ),
+        "Entropy": (entropy_solver, 1),
+        "Minimax": (minimax_solver, 1),
     }
-
-    def candidates_for(solver, p, history):
-        if solver == "Entropy":
-            return entropy_candidates(p, history)
-        return minimax_candidates(p, history)
 
     rows = []
     all_results = {}
 
-    for name, (solver, reps) in solvers.items():
+    print(f"\nPokémon count: {n}")
+    print(f"Maximum guesses: {MAX_GUESSES}")
+    print(f"Lost-game score: {FAIL_SCORE}")
+    print("\nRunning benchmarks...\n")
+
+    for name, (solver, run_count) in solvers.items():
+
         scores = []
-        start = time.perf_counter()
+        start_time = time.perf_counter()
 
-        for _ in range(reps):
+        for repetition in range(run_count):
+
             for answer in pokemon:
-                if name in ("Entropy", "Minimax"):
-                    def wrapped(p, h, s=name):
-                        candidates = candidates_for(s, p, h)
-                        guessed = [g for g, _ in h]
-                        obj = entropy if s == "Entropy" else minimax
-                        return obj.next_guess(candidates, guessed)
-                else:
-                    wrapped = solver
 
-                score, _ = play_game(wrapped, pokemon, answer)
+                score, game = play_game(
+                    solver,
+                    pokemon,
+                    answer
+                )
+
                 scores.append(score)
 
-        elapsed = time.perf_counter() - start
+        elapsed = time.perf_counter() - start_time
+
         scores = np.asarray(scores)
         all_results[name] = scores
+
+        wins = np.sum(scores < FAIL_SCORE)
 
         rows.append({
             "Solver": name,
             "Runs": len(scores),
-            "Avg guesses": round(scores.mean(), 2),
+            "Avg guesses": round(float(scores.mean()), 2),
             "Median": float(np.median(scores)),
             "Worst case": int(scores.max()),
-            "Win rate": round((scores < FAIL_SCORE).mean() * 100, 2),
-            "Solved in <=6 (%)": round((scores <= 6).mean() * 100, 2),
-            "ms per game": round(elapsed / len(scores) * 1000, 2),
+            "Std dev": round(float(scores.std()), 2),
+            "Win rate": round(wins / len(scores) * 100, 2),
+            "Solved in <=6 (%)": round(
+                np.sum(scores <= 6) / len(scores) * 100, 2
+            ),
+            "ms per game": round(
+                elapsed / len(scores) * 1000, 2
+            ),
         })
+
+        print(
+            f"{name}: {wins}/{len(scores)} wins | "
+            f"Average: {scores.mean():.2f} | "
+            f"Worst: {scores.max()}"
+        )
 
     df = pd.DataFrame(rows)
 
-    if save:
-        df.to_csv(os.path.join(RESULTS_DIR, "results_table.csv"), index=False)
-        _chart(df, all_results, os.path.join(RESULTS_DIR, "benchmark_chart.png"), show)
-
+    print("\nFINAL BENCHMARK RESULTS")
     print(df.to_string(index=False))
+
+    if save:
+
+        csv_path = os.path.join(
+            RESULTS_DIR,
+            "results_table.csv"
+        )
+
+        chart_path = os.path.join(
+            RESULTS_DIR,
+            "benchmark_chart.png"
+        )
+
+        df.to_csv(csv_path, index=False)
+        create_chart(df, chart_path, show)
+
+        print("\nFiles saved:")
+        print(csv_path)
+        print(chart_path)
+
     return df
 
 
-def entropy_candidates(pokemon, history):
-    from basic_solvers import filter_candidates
-    return filter_candidates(pokemon, history)
+def create_chart(df, path, show=True):
 
-
-def minimax_candidates(pokemon, history):
-    from basic_solvers import filter_candidates
-    return filter_candidates(pokemon, history)
-
-
-def _chart(df, results, path, show):
     fig, ax = plt.subplots(figsize=(9, 5))
-    ax.bar(df["Solver"], df["Avg guesses"])
+
+    bars = ax.bar(
+        df["Solver"],
+        df["Avg guesses"],
+        width=0.6
+    )
+
+    ax.set_title(
+        "Pokémon Wordle - Strategy Benchmark",
+        fontsize=15,
+        fontweight="bold"
+    )
+
     ax.set_ylabel("Average guesses (loss = 9)")
-    ax.set_title("Pokémon Wordle — Strategy Benchmark")
-    ax.grid(axis="y", alpha=0.25)
+    ax.set_xlabel("Strategy")
+    ax.set_ylim(0, max(df["Avg guesses"]) + 1)
+
+    ax.grid(
+        axis="y",
+        linestyle="--",
+        alpha=0.3
+    )
+
+    ax.set_axisbelow(True)
+
+    for bar, value in zip(bars, df["Avg guesses"]):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.08,
+            f"{value:.2f}",
+            ha="center",
+            fontsize=10
+        )
+
     fig.tight_layout()
     fig.savefig(path, dpi=200, bbox_inches="tight")
 
     if show:
         plt.show()
+
     plt.close(fig)
 
 
 if __name__ == "__main__":
-    run_all()
+    run_all(repeats=5, seed=0)
