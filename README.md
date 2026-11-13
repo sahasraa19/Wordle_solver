@@ -2,9 +2,11 @@
 
 A Streamlit-based Pokémon guessing game implementing four intelligent guessing strategies: Random, Filter, Entropy, and Minimax.
 
-## Live Demo
+### [🎮 Play Pokémon Wordle](https://wordle-solver-1-c3w3.onrender.com/)
 
-[**🎮Play Pokémon Wordle**](https://wordle-solver-1-c3w3.onrender.com/)
+The application is hosted on Render and built using Streamlit.
+
+
 
 An interactive Pokémon Wordle game that explores and compares intelligent guessing strategies. The project combines a Pokémon dataset, a Wordle-style feedback engine, automated solvers, benchmarking, and a Streamlit-based application.
 
