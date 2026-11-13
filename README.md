@@ -1,25 +1,6 @@
-# ⚡ Pokémon Wordle: Intelligent Guessing Strategies
+#  Pokémon Wordle: Intelligent Guessing Strategies
 
-<p align="center">
-  <strong>An interactive Pokémon guessing game powered by intelligent search algorithms.</strong>
-</p>
-
-<p align="center">
-  <a href="https://wordle-solver-1-c3w3.onrender.com/">
-    🎮 <strong>PLAY THE LIVE APPLICATION</strong>
-  </a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python" />
-  <img src="https://img.shields.io/badge/Framework-Streamlit-FF4B4B?logo=streamlit" />
-  <img src="https://img.shields.io/badge/Dataset-386%20Pokémon-yellow" />
-  <img src="https://img.shields.io/badge/Algorithms-4-teal" />
-</p>
-
----
-
-## 📌 Overview
+## Overview
 
 **Pokémon Wordle: Intelligent Guessing Strategies** is an interactive guessing game inspired by Wordle. Players attempt to identify a hidden Pokémon using attribute-based clues and a maximum of **8 guesses**.
 
@@ -27,7 +8,7 @@ Beyond human gameplay, the project implements four AI guessing strategies and co
 
 The project explores how candidate elimination, information theory, and worst-case optimization can improve decision-making in a constrained search problem.
 
-## ✨ Key Features
+##  Key Features
 
 - 🎮 **Human Gameplay:** Play the guessing game manually using attribute-based feedback.
 - 🤖 **AI Demonstration:** Watch intelligent algorithms solve the game automatically.
@@ -36,20 +17,9 @@ The project explores how candidate elimination, information theory, and worst-ca
 - 📈 **Benchmark Analysis:** Evaluate average guesses, win rates, execution time, and other performance metrics.
 - 🧩 **Modular Architecture:** Separate modules for game mechanics, dataset handling, solvers, and benchmarking.
 
-## 🕹️ Application Preview
-
-### Human Gameplay
-![Human Gameplay](human_gameplay.png)
-
-### AI Demonstration
-![AI Demonstration](ai_demonstration.png)
-
-### Algorithm Comparison
-![Algorithm Comparison](algorithm_comparison.png)
-
 ---
 
-## 🧠 Guessing Algorithms
+##  Guessing Algorithms
 
 The project implements four strategies:
 
@@ -74,7 +44,7 @@ Evaluates possible feedback outcomes and chooses guesses that minimize the worst
 
 ---
 
-## 📂 Dataset
+##  Dataset
 
 The project uses a dataset containing **386 Pokémon records**.
 
@@ -93,7 +63,7 @@ These attributes are used to generate feedback and progressively narrow down the
 
 ---
 
-## 🏗️ Project Architecture
+## Project Architecture
 
 The project follows a modular Python architecture.
 
@@ -147,7 +117,7 @@ pokemon_wordle/
 
 ---
 
-## 📊 Experimental Results
+##  Experimental Results
 
 All strategies were evaluated using a maximum of **8 guesses per game**.
 
@@ -169,9 +139,6 @@ The experiment used different numbers of runs:
 
 **Note:** A score of 9 represents an unsuccessful game, using the project's `FAIL_SCORE` convention. The actual game limit is 8 guesses.
 
-### Benchmark Visualization
-
-![Benchmark Performance Comparison](benchmark_chart.png)
 
 ### Key Observations
 
@@ -183,7 +150,7 @@ The experiment used different numbers of runs:
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 - **Python** – Core programming language.
 - **Streamlit** – Interactive web application.
@@ -195,45 +162,13 @@ The experiment used different numbers of runs:
 
 ---
 
-## 🚀 Run Locally
+##  Run Locally
 
 ### Prerequisites
 
 - Python 3.11 or compatible version.
 - Git.
 - pip.
-
-### Installation
-
-**1. Clone the repository**
-
-```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-```
-
-**2. Navigate to the project directory**
-
-```bash
-cd pokemon_wordle
-```
-
-**3. Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-**4. Run the application**
-
-```bash
-streamlit run app.py
-```
-
-The application will be available at:
-
-```text
-http://localhost:8501
-```
 
 ---
 
