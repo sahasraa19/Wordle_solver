@@ -1,6 +1,5 @@
-
-Strategy	Runs	Average guesses	Median	Worst case	Win rate	Solved in ≤6	ms/game
-Random	1,930	7.91	8	8	2.33%	1.87%	0.41
-Filter	1,930	3.75	4	8	100%	98.45%	1.86
-Entropy	386	3.07	3	5	100%	100%	9.47
-Minimax	386	3.14	3	5	100%	100%	9.44
+Solver,Runs,Avg guesses,Median,Worst case,Std dev,Win rate,Solved in <=6 (%),ms per game
+Random,1930,7.91,8,8,,2.33,1.87,0.41
+Filter,1930,3.75,4,8,,100,98.45,1.86
+Entropy,386,3.07,3,5,0.63,100,100,9.47
+Minimax,386,3.14,3,5,0.64,100,100,9.44
