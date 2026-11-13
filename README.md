@@ -1,98 +1,101 @@
-# POKEMON_WORDLE_SOLVER
+# ⚡ Pokémon Wordle: Intelligent Guessing Strategies
 
-A Streamlit-based Pokémon guessing game implementing four intelligent guessing strategies: Random, Filter, Entropy, and Minimax.
+<p align="center">
+  <strong>An interactive Pokémon guessing game powered by intelligent search algorithms.</strong>
+</p>
 
-### [🎮 Play Pokémon Wordle](https://wordle-solver-1-c3w3.onrender.com/)
+<p align="center">
+  <a href="https://wordle-solver-1-c3w3.onrender.com/">
+    🎮 <strong>PLAY THE LIVE APPLICATION</strong>
+  </a>
+</p>
 
-The application is hosted on Render and built using Streamlit.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python" />
+  <img src="https://img.shields.io/badge/Framework-Streamlit-FF4B4B?logo=streamlit" />
+  <img src="https://img.shields.io/badge/Dataset-386%20Pokémon-yellow" />
+  <img src="https://img.shields.io/badge/Algorithms-4-teal" />
+</p>
 
+---
 
+## 📌 Overview
 
-An interactive Pokémon Wordle game that explores and compares intelligent guessing strategies. The project combines a Pokémon dataset, a Wordle-style feedback engine, automated solvers, benchmarking, and a Streamlit-based application.
+**Pokémon Wordle: Intelligent Guessing Strategies** is an interactive guessing game inspired by Wordle. Players attempt to identify a hidden Pokémon using attribute-based clues and a maximum of **8 guesses**.
 
-## Project Overview
+Beyond human gameplay, the project implements four AI guessing strategies and compares their performance using automated experiments.
 
-The objective of this project is to develop a Pokémon guessing game and investigate how different algorithms can identify a hidden Pokémon using attribute-based clues.
+The project explores how candidate elimination, information theory, and worst-case optimization can improve decision-making in a constrained search problem.
 
-**Dataset:** 386 Pokémon records  
-**Attributes:** Name, Generation, Type 1, Type 2, Height, Weight  
-**Maximum guesses:** 8  
-**Strategies:** Random, Filter, Entropy, Minimax  
-**Interface:** Streamlit
+## ✨ Key Features
 
-## Features
+- 🎮 **Human Gameplay:** Play the guessing game manually using attribute-based feedback.
+- 🤖 **AI Demonstration:** Watch intelligent algorithms solve the game automatically.
+- 📊 **Algorithm Comparison:** Compare the performance of four different guessing strategies.
+- 🔍 **Attribute-Based Feedback:** Receive clues based on generation, Pokémon types, height, and weight.
+- 📈 **Benchmark Analysis:** Evaluate average guesses, win rates, execution time, and other performance metrics.
+- 🧩 **Modular Architecture:** Separate modules for game mechanics, dataset handling, solvers, and benchmarking.
 
-- Interactive Pokémon guessing game.
-- Attribute-based feedback after each guess.
-- Automated Pokémon guessing using four algorithms.
-- AI demonstration and algorithm comparison.
-- Benchmark statistics and visualizations.
-- Dataset exploration and research analytics.
+## 🕹️ Application Preview
 
-## Guessing Strategies
+### Human Gameplay
+![Human Gameplay](human_gameplay.png)
 
-| Strategy | Description |
+### AI Demonstration
+![AI Demonstration](ai_demonstration.png)
+
+### Algorithm Comparison
+![Algorithm Comparison](algorithm_comparison.png)
+
+---
+
+## 🧠 Guessing Algorithms
+
+The project implements four strategies:
+
+| Strategy | Approach |
 |---|---|
-| Random | Selects a Pokémon randomly from the available candidates. |
-| Filter | Eliminates candidates that do not match the feedback from previous guesses. |
-| Entropy | Selects guesses based on expected information gain to reduce uncertainty. |
-| Minimax | Selects guesses to minimize the largest possible remaining candidate group. |
+| Random | Selects an unguessed Pokémon randomly without using feedback to optimize guesses. |
+| Filter | Eliminates Pokémon inconsistent with previous feedback. |
+| Entropy | Selects guesses using expected information gain. |
+| Minimax | Minimizes the largest possible remaining candidate group. |
 
-All strategies operate under the maximum limit of eight guesses.
+### 1. Random Strategy
+Acts as the baseline approach. It selects guesses randomly and does not use previous clues to improve its decisions.
 
-## Dataset
+### 2. Filter Strategy
+Maintains a set of possible Pokémon and removes candidates that do not match the feedback received from earlier guesses.
 
-The dataset contains 386 Pokémon records with the following attributes:
+### 3. Entropy Strategy
+Uses information theory to select guesses that are expected to reduce uncertainty about the hidden Pokémon.
 
-- Pokémon name
-- Generation
-- Primary type
-- Secondary type
-- Height
-- Weight
+### 4. Minimax Strategy
+Evaluates possible feedback outcomes and chooses guesses that minimize the worst-case number of remaining candidates.
 
-The dataset is stored in the `data/` directory.
+---
 
-## Application Modes
+## 📂 Dataset
 
-1. **Human Gameplay:** Allows users to play Pokémon Wordle themselves.
-2. **AI Demonstration:** Demonstrates how an automated strategy solves the game.
-3. **Algorithm Comparison:** Compares the performance of the four guessing strategies.
+The project uses a dataset containing **386 Pokémon records**.
 
-The upgraded research interface also provides analytics and dataset exploration views.
+Each record contains the following attributes:
 
-## Benchmark Methodology
+| Attribute | Description |
+|---|---|
+| Name | Pokémon name |
+| Generation | Pokémon generation |
+| Type 1 | Primary Pokémon type |
+| Type 2 | Secondary Pokémon type |
+| Height | Pokémon height |
+| Weight | Pokémon weight |
 
-The strategies were evaluated using the 386 possible hidden Pokémon.
+These attributes are used to generate feedback and progressively narrow down the possible answers.
 
-| Strategy | Runs |
-|---|---:|
-| Random | 1,930 |
-| Filter | 1,930 |
-| Entropy | 386 |
-| Minimax | 386 |
+---
 
-Random and Filter were tested five times for every hidden Pokémon. Entropy and Minimax were tested once for every hidden Pokémon.
+## 🏗️ Project Architecture
 
-All experiments used the same maximum of eight guesses. The saved benchmark results are available in `results/results_table.csv`.
-
-To regenerate the benchmark results, run:
-
-```bash
-python benchmark.py
-```
-
-## Technologies Used
-
-- Python
-- Streamlit
-- Pandas
-- NumPy
-- Matplotlib
-
-Refer to `requirements.txt` for the complete dependency list.
-
-## Project Structure
+The project follows a modular Python architecture.
 
 ```text
 pokemon_wordle/
@@ -129,77 +132,146 @@ pokemon_wordle/
 └── README.md
 ```
 
+### Core Modules
 
+| File | Responsibility |
+|---|---|
+| `loader.py` | Loads and prepares the Pokémon dataset. |
+| `engine.py` | Handles game mechanics, guesses, and feedback generation. |
+| `basic_solvers.py` | Implements Random and Filter strategies. |
+| `entropy_solver.py` | Implements the Entropy-based solver. |
+| `minimax_solver.py` | Implements the Minimax solver. |
+| `benchmark.py` | Runs automated experiments and generates benchmark results. |
+| `research_lab.py` | Supports research and algorithm experimentation. |
+| `app.py` | Runs the Streamlit application. |
 
-## Installation and Execution
+---
 
-### 1. Clone the repository
+## 📊 Experimental Results
+
+All strategies were evaluated using a maximum of **8 guesses per game**.
+
+The experiment used different numbers of runs:
+
+- Random: 5 runs for each of the 386 possible hidden Pokémon (1,930 runs).
+- Filter: 5 runs for each of the 386 possible hidden Pokémon (1,930 runs).
+- Entropy: 1 run for each hidden Pokémon (386 runs).
+- Minimax: 1 run for each hidden Pokémon (386 runs).
+
+### Performance Comparison
+
+| Strategy | Runs | Avg. Guesses | Median | Worst Case | Win Rate | Solved ≤6 | ms/game |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Random | 1930 | 8.91 | 9 | 9 | 1.97% | 1.45% | 0.08 |
+| Filter | 1930 | 3.67 | 4 | 9 | 99.95% | 99.12% | 0.61 |
+| Entropy | 386 | **3.07** | 3 | 5 | 100% | 100% | 2.72 |
+| Minimax | 386 | 3.14 | 3 | 5 | 100% | 100% | 2.29 |
+
+**Note:** A score of 9 represents an unsuccessful game, using the project's `FAIL_SCORE` convention. The actual game limit is 8 guesses.
+
+### Benchmark Visualization
+
+![Benchmark Performance Comparison](benchmark_chart.png)
+
+### Key Observations
+
+- Random guessing performs poorly because it does not use feedback to guide decisions.
+- Filter significantly improves performance through candidate elimination.
+- Entropy achieves the lowest average guess count of **3.07**.
+- Minimax solves all evaluated cases within five guesses.
+- Filter has lower execution time than the two advanced strategies in this benchmark.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Python** – Core programming language.
+- **Streamlit** – Interactive web application.
+- **Pandas** – Dataset handling and analysis.
+- **NumPy** – Numerical operations.
+- **Matplotlib** – Benchmark visualization.
+- **GitHub** – Version control and project collaboration.
+- **Render** – Application deployment.
+
+---
+
+## 🚀 Run Locally
+
+### Prerequisites
+
+- Python 3.11 or compatible version.
+- Git.
+- pip.
+
+### Installation
+
+**1. Clone the repository**
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_PROJECT_FOLDER>
+git clone YOUR_GITHUB_REPOSITORY_URL
 ```
 
-### 2. Create a virtual environment
+**2. Navigate to the project directory**
 
 ```bash
-python -m venv .venv
+cd pokemon_wordle
 ```
 
-### 3. Activate the environment
-
-**Windows:**
-
-```bash
-.venv\Scripts\activate
-```
-
-**macOS/Linux:**
-
-```bash
-source .venv/bin/activate
-```
-
-### 4. Install dependencies
+**3. Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Run the application
-
-For the research interface:
-
-```bash
-streamlit run research_lab.py
-```
-
-If your final project uses `app.py` as its main interface, use:
+**4. Run the application**
 
 ```bash
 streamlit run app.py
 ```
 
-Open the local URL displayed in the terminal.
+The application will be available at:
 
-## Team Members
+```text
+http://localhost:8501
+```
 
-This project was collaboratively developed by:
+---
 
-| No. | Name | Student ID | Contribution |
-|---|---|---|---|
-| 1 | Badagoni Sri Sahasra | B24DS003 | Application integration and final project report |
-| 2 | Malraju Srinayana | B24CS024 | Data preparation and game engine |
-| 3 | Nagineni Thanmaie | B24EC019 | Random and Filter strategies |
-| 4 | Parinitha Pulipati | B24CS037 | Entropy strategy |
-| 5 | V. Varshitha | B24ME050 | Minimax strategy and benchmarking |
+## 🌐 Live Deployment
 
+The application is deployed using Render.
 
-### Human Gameplay
+<p align="center">
+  <a href="https://wordle-solver-1-c3w3.onrender.com/">
+    <strong>⚡ Open Pokémon Wordle — Live Demo</strong>
+  </a>
+</p>
 
-<img src="https://github.com/user-attachments/assets/25c095cc-10ba-4a3b-a122-f6f531411e93" width="800" />
+---
 
-## Conclusion
+## 👥 Team Members
 
-Pokémon Wordle demonstrates how different intelligent guessing strategies can be applied to a constraint-based guessing game. By implementing and comparing Random, Filter, Entropy, and Minimax approaches, the project provides an interactive way to understand candidate elimination, information gain, and worst-case optimization.
+| Name | Student ID |
+|---|---|
+| Badagoni Sri Sahasra | B24DS003 |
+| Malraju Srinayana | B24CS024 |
+| Nagineni Thanmaie | B24EC019 |
+| Parinitha Pulipati | B24CS037 |
+| V. Varshitha | B24ME050 |
 
+**Academic Year:** 2026–27
+
+---
+
+## 🎯 Project Objective
+
+The primary objective is to investigate how different intelligent guessing strategies perform in a constrained attribute-based search environment.
+
+By implementing and benchmarking Random, Filter, Entropy, and Minimax approaches, the project demonstrates the relationship between information gain, candidate reduction, computational cost, and guessing efficiency.
+
+---
+
+<p align="center">
+  <strong>Pokémon Wordle: Intelligent Guessing Strategies</strong><br/>
+  Built with Python, Streamlit, and intelligent search algorithms ⚡
+</p>
