@@ -1,11 +1,6 @@
 # ============================================================
 # POKÉMON WORDLE · RESEARCH LAB  —  3D KAWAII PREMIUM EDITION
 # ------------------------------------------------------------
-# Drop-in replacement for research_lab.py.
-# Every game rule, solver call, dataset load and benchmark
-# calculation is the project's own code; only the presentation
-# layer (theme, layout, components, animations) is new.
-# ============================================================
 
 import os
 import html
