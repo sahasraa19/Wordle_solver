@@ -1,6 +1,16 @@
 # ============================================================
 # POKÉMON WORDLE · RESEARCH LAB  —  RETRO PIXEL EDITION
 # ------------------------------------------------------------
+# Same project, same logic: a Game Boy Color "title screen"
+# theme (night-sky blue, amber pixel lettering, teal horizon,
+# dialog boxes, HP bars and Silver/Emerald pixel sprites).
+#
+# Every game rule, solver call, dataset load and benchmark
+# calculation is the project's own code; only the presentation
+# layer is new. Run it exactly like the original:
+#     streamlit run research_lab_retro.py
+# ============================================================
+
 import os
 import html
 import math
@@ -2089,7 +2099,7 @@ elif page == "Professor’s Analytics":
                     '<p style="margin-bottom:8px">Higher is better.</p>'
                     + bar_chart(
                         list(zip(ranked["Solver"], ranked[pc])),
-                        unit="%", decimals=1, max_value=100,
+                        unit="%", decimals=2, max_value=100,
                     )
                     + '</div>'
                 )
